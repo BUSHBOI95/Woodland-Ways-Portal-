@@ -1,4 +1,4 @@
-const CACHE_NAME = 'staff-portal-v2'; // Increment this version to force update
+const CACHE_NAME = 'staff-portal-v3'; // Increment this version to force update
 
 const urlsToCache = [
   '/',
