@@ -2,14 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Staff Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Woodland Ways Portal</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
 </head>
 <body>
-  <h1>Phase 2 Build Activated — Full Staff Portal App Coming Soon</h1>
-  <p>This is the working offline-capable bushcraft app.</p>
+
+  <!-- Top Header with Logo and Title -->
+  <header class="top-bar">
+    <img src="icons/icon.png" alt="Woodland Ways Logo" class="logo" />
+    <h1 class="brand-title">Woodland Ways</h1>
+    <div class="menu-icon">☰</div>
+  </header>
+
+  <!-- Main Feed Area -->
+  <main class="feed">
+    <div class="post-bar">
+      <input type="text" placeholder="What's on your mind?" />
+    </div>
+    <div class="action-buttons">
+      <button>Create Post</button>
+      <button>Photos</button>
+      <button>Events</button>
+      <button>Directory</button>
+    </div>
+
+    <!-- Placeholder for News Feed -->
+    <div class="feed-card">
+      <h3>Welcome!</h3>
+      <p>This is the Instructor home feed. Your updates will appear here.</p>
+    </div>
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <button>Home</button>
+    <button>My Courses</button>
+    <button>Calendar</button>
+    <button>Handbook</button>
+    <button>Notifications</button>
+    <button>Menu</button>
+  </nav>
+
   <script src="app.js"></script>
 </body>
 </html>
