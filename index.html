@@ -1,50 +1,50 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Woodland Ways Portal</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Woodland Ways Staff Portal</title>
   <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- Top Header with Logo and Title -->
   <header class="top-bar">
     <img src="icons/icon.png" alt="Woodland Ways Logo" class="logo" />
-    <h1 class="brand-title">Woodland Ways</h1>
-    <div class="menu-icon">☰</div>
+    <h1>Woodland Ways</h1>
   </header>
 
-  <!-- Main Feed Area -->
-  <main class="feed">
-    <div class="post-bar">
-      <input type="text" placeholder="What's on your mind?" />
-    </div>
-    <div class="action-buttons">
-      <button>Create Post</button>
-      <button>Photos</button>
-      <button>Events</button>
-      <button>Directory</button>
+  <main>
+    <div class="post-box">
+      <input type="text" placeholder="What’s on your mind?" />
+      <div class="post-actions">
+        <button>Photos</button>
+        <button>Events</button>
+        <button>Directory</button>
+      </div>
     </div>
 
-    <!-- Placeholder for News Feed -->
-    <div class="feed-card">
-      <h3>Welcome!</h3>
-      <p>This is the Instructor home feed. Your updates will appear here.</p>
-    </div>
+    <section class="feed">
+      <article class="post">
+        <div class="post-header">
+          <img src="icons/icon.png" class="avatar" />
+          <div>
+            <strong>Jon Magellan</strong><br />
+            <small>26m ago</small>
+          </div>
+        </div>
+        <p>Hi all. I’ve knocked these up for the show to use…</p>
+      </article>
+    </section>
   </main>
 
-  <!-- Bottom Navigation Bar -->
   <nav class="bottom-nav">
-    <button>Home</button>
+    <button class="active">Home</button>
     <button>My Courses</button>
     <button>Calendar</button>
-    <button>Handbook</button>
+    <button>Instructor Handbook</button>
     <button>Notifications</button>
     <button>Menu</button>
   </nav>
-
-  <script src="app.js"></script>
 </body>
 </html>
