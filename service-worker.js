@@ -1,13 +1,43 @@
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open('portal-cache').then(cache => {
-      return cache.addAll(['/', '/index.html', '/style.css', '/app.js']);
+const CACHE_NAME = 'staff-portal-v2'; // Increment this version to force update
+
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/style.css',
+  '/app.js',
+  '/manifest.json',
+  '/icons/icon.png'
+];
+
+// Install
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(urlsToCache);
     })
   );
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(response => response || fetch(e.request))
+// Activate
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames =>
+      Promise.all(
+        cacheNames
+          .filter(name => name !== CACHE_NAME)
+          .map(name => caches.delete(name))
+      )
+    )
+  );
+  self.clients.claim();
+});
+
+// Fetch
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
   );
 });
