@@ -28,7 +28,13 @@ self.addEventListener('activate', event => {
           .filter(name => name !== CACHE_NAME)
           .map(name => caches.delete(name))
       )
-    )
+    )self.addEventListener('install', (event) => {
+  self.skipWaiting(); // Force SW to activate immediately
+});
+
+self.addEventListener('activate', (event) => {
+  clients.claim(); // Force control of all clients
+});
   );
   self.clients.claim();
 });
