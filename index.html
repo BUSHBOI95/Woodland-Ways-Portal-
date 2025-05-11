@@ -4,18 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Woodland Ways</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
+  <link href="style.css" rel="stylesheet">
 </head>
 <body>
-  <header class="app-header">
-    <img src="Icon.png" alt="Woodland Ways Logo" class="logo" />
-    <h1>Woodland Ways</h1>
+  <header class="top-bar">
+    <div class="logo-section">
+      <img src="Icon.png" alt="Logo" class="logo">
+      <h1 class="app-name">Woodland Ways</h1>
+    </div>
     <div class="menu-icon">&#9776;</div>
   </header>
 
-  <main>
-    <div class="post-input">
+  <main class="main-feed">
+    <div class="post-box">
       <input type="text" placeholder="What's on your mind?" />
     </div>
 
@@ -26,22 +27,24 @@
     </div>
 
     <div class="post">
-      <img src="Icon.png" alt="Avatar" class="avatar" />
-      <div class="post-content">
-        <strong>Jon Magellan</strong>
-        <p class="timestamp">26m ago</p>
-        <p>Hi all. I’ve knocked these up for the show to use…</p>
+      <div class="post-header">
+        <img src="Icon.png" alt="User" class="avatar">
+        <div>
+          <strong>Jon Magellan</strong><br>
+          <small>26m ago</small>
+        </div>
       </div>
+      <p>Hi all. I’ve knocked these up for the show to use…</p>
     </div>
   </main>
 
   <nav class="bottom-nav">
-    <div class="nav-item"><img src="icons/home.svg" /><span>Home</span></div>
-    <div class="nav-item"><img src="icons/courses.svg" /><span>My Courses</span></div>
-    <div class="nav-item"><img src="icons/calendar.svg" /><span>Calendar</span></div>
-    <div class="nav-item"><img src="icons/handbook.svg" /><span>Handbook</span></div>
-    <div class="nav-item"><img src="icons/notifications.svg" /><span>Notifications</span></div>
-    <div class="nav-item"><img src="icons/menu.svg" /><span>Menu</span></div>
+    <a class="nav-item" href="#"><img src="icons/home.svg"><span>Home</span></a>
+    <a class="nav-item" href="#"><img src="icons/courses.svg"><span>My Courses</span></a>
+    <a class="nav-item" href="#"><img src="icons/calendar.svg"><span>Calendar</span></a>
+    <a class="nav-item" href="#"><img src="icons/handbook.svg"><span>Handbook</span></a>
+    <a class="nav-item" href="#"><img src="icons/notifications.svg"><span>Notifications</span></a>
+    <a class="nav-item" href="#"><img src="icons/menu.svg"><span>Menu</span></a>
   </nav>
 </body>
 </html>
