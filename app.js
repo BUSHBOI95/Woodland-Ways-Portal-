@@ -1,7 +1,2 @@
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(() => console.log('Service Worker registered'))
-      .catch(err => console.log('Service Worker failed:', err));
-  });
-}
+// app.js (placeholder)
+console.log("App loaded. Navigation will be wired soon.");
