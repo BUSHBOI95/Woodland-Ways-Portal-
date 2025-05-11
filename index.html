@@ -1,37 +1,38 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Woodland Ways</title>
-  <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icons/Icon.PNG" />
+  <link rel="icon" href="icons/Icon.png" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
   <header class="top-bar">
-    <img src="icons/Icon.PNG" alt="Logo" class="logo" />
+    <img src="icons/Icon.png" alt="Logo" class="logo" />
     <h1>Woodland Ways</h1>
     <button class="menu-button">&#9776;</button>
   </header>
 
-  <main>
-    <div class="post-creator">
-      <input type="text" placeholder="What’s on your mind?" />
-      <div class="actions">
-        <button>Photos</button>
-        <button>Events</button>
-        <button>Directory</button>
-      </div>
+  <main class="feed">
+    <div class="post-box">
+      <input type="text" placeholder="What's on your mind?" />
+    </div>
+
+    <div class="quick-buttons">
+      <button>Photos</button>
+      <button>Events</button>
+      <button>Directory</button>
     </div>
 
     <div class="post">
       <div class="post-header">
-        <img src="icons/Icon.PNG" alt="User" class="avatar" />
+        <img src="icons/Icon.png" alt="Profile" class="avatar" />
         <div>
-          <strong>Jon Magellan</strong><br />
-          <span class="timestamp">26m ago</span>
+          <strong>Jon Magellan</strong><br/>
+          <small>26m ago</small>
         </div>
       </div>
       <p>Hi all. I’ve knocked these up for the show to use…</p>
@@ -39,12 +40,32 @@
   </main>
 
   <nav class="bottom-nav">
-    <button class="active">Home</button>
-    <button>My Courses</button>
-    <button>Calendar</button>
-    <button>Handbook</button>
-    <button>Notifications</button>
-    <button>Menu</button>
+    <a href="#" class="nav-item">
+      <i class="fas fa-house"></i>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-book-open"></i>
+      <span>My Courses</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-calendar-alt"></i>
+      <span>Calendar</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-book"></i>
+      <span>Handbook</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-bell"></i>
+      <span>Notifications</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-bars"></i>
+      <span>Menu</span>
+    </a>
   </nav>
+
+  <script src="app.js"></script>
 </body>
 </html>
