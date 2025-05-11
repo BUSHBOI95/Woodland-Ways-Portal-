@@ -1,50 +1,53 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Woodland Ways Staff Portal</title>
-  <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
 </head>
 <body>
+  <!-- Top Bar -->
   <header class="top-bar">
-    <img src="icons/icon.png" alt="Woodland Ways Logo" class="logo" />
+    <img src="icons/icon.png" alt="Logo" class="logo" />
     <h1>Woodland Ways</h1>
   </header>
 
-  <main>
-    <div class="post-box">
-      <input type="text" placeholder="What’s on your mind?" />
-      <div class="post-actions">
-        <button>Photos</button>
-        <button>Events</button>
-        <button>Directory</button>
-      </div>
+  <!-- Post Input -->
+  <div class="post-box">
+    <input type="text" placeholder="What’s on your mind?" />
+    <div class="post-actions">
+      <button>Photos</button>
+      <button>Events</button>
+      <button>Directory</button>
     </div>
+  </div>
 
-    <section class="feed">
-      <article class="post">
-        <div class="post-header">
-          <img src="icons/icon.png" class="avatar" />
-          <div>
-            <strong>Jon Magellan</strong><br />
-            <small>26m ago</small>
-          </div>
+  <!-- Sample Feed -->
+  <div class="feed">
+    <div class="post-card">
+      <div class="post-header">
+        <img src="icons/icon.png" class="avatar" />
+        <div>
+          <strong>Jon Magellan</strong><br />
+          <small>26m ago</small>
         </div>
-        <p>Hi all. I’ve knocked these up for the show to use…</p>
-      </article>
-    </section>
-  </main>
+      </div>
+      <p>Hi all. I’ve knocked these up for the show to use…</p>
+    </div>
+  </div>
 
+  <!-- Bottom Navigation -->
   <nav class="bottom-nav">
     <button class="active">Home</button>
     <button>My Courses</button>
     <button>Calendar</button>
-    <button>Instructor Handbook</button>
+    <button>Handbook</button>
     <button>Notifications</button>
     <button>Menu</button>
   </nav>
+
+  <script src="app.js"></script>
 </body>
 </html>
