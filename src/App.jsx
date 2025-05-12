@@ -1,55 +1,61 @@
 import React from 'react';
+import { Assignment, CalendarMonth, MenuBook, Menu, Home } from '@mui/icons-material';
 
-export default function App() {
+const App = () => {
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-white">
       {/* Header */}
-      <header className="flex items-center px-4 py-2 border-b border-gray-200 shadow-sm">
-        <img src="/Icon.png" alt="Woodland Ways Logo" className="h-8 w-8 mr-2" />
-        <h1 className="text-xl font-semibold text-orange-600">Woodland Ways</h1>
+      <header className="flex items-center px-4 py-3 border-b border-gray-300">
+        <img
+          src="/icon.png"
+          alt="Logo"
+          className="w-8 h-8 mr-2"
+        />
+        <h1 className="text-xl font-bold text-orange-600">Woodland Ways</h1>
       </header>
 
-      {/* Post Box */}
-      <div className="p-4 border-b border-gray-200">
+      {/* Post bar */}
+      <div className="px-4 py-3 border-b border-gray-300">
         <input
           type="text"
           placeholder="Post an update..."
-          className="w-full px-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none"
+          className="w-full px-4 py-2 border rounded-full bg-gray-100 text-sm"
         />
       </div>
 
-      {/* Sample Post */}
-      <div className="p-4 border-b border-gray-200">
-        <div className="text-sm text-gray-700">"Course went great today! Loads of happy faces."</div>
-        <div className="text-xs text-gray-400 mt-1">– Joe, 2 hours ago</div>
+      {/* Feed */}
+      <div className="flex-1 px-4 py-2 overflow-y-auto">
+        <div className="text-gray-800 text-sm mb-2">"Course went great today! Loads of happy faces."</div>
+        <div className="text-gray-500 text-xs">– Joe, 2 hours ago</div>
       </div>
 
-      {/* Spacer to push footer to bottom */}
-      <div className="flex-grow" />
-
-      {/* Footer Navigation */}
-      <nav className="flex justify-around items-center border-t border-gray-300 py-2 bg-white">
-        <button className="text-orange-600 text-xs flex flex-col items-center">
-          <span className="material-icons">home</span>
-          Home
-        </button>
-        <button className="text-gray-600 text-xs flex flex-col items-center">
-          <span className="material-icons">assignment</span>
-          My Courses
-        </button>
-        <button className="text-gray-600 text-xs flex flex-col items-center">
-          <span className="material-icons">calendar_month</span>
-          Calendar
-        </button>
-        <button className="text-gray-600 text-xs flex flex-col items-center">
-          <span className="material-icons">menu_book</span>
-          Handbook
-        </button>
-        <button className="text-gray-600 text-xs flex flex-col items-center">
-          <span className="material-icons">menu</span>
-          Menu
-        </button>
-      </nav>
+      {/* Bottom Navigation */}
+      <footer className="border-t border-gray-300">
+        <nav className="flex justify-around items-center text-xs text-gray-700 py-2">
+          <div className="flex flex-col items-center text-orange-600">
+            <Home fontSize="small" />
+            <span className="text-[11px]">Home</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <Assignment fontSize="small" />
+            <span className="text-[11px]">My Courses</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <CalendarMonth fontSize="small" />
+            <span className="text-[11px]">Calendar</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <MenuBook fontSize="small" />
+            <span className="text-[11px]">Handbook</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <Menu fontSize="small" />
+            <span className="text-[11px]">Menu</span>
+          </div>
+        </nav>
+      </footer>
     </div>
   );
-}
+};
+
+export default App;
