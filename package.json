@@ -1,16 +1,21 @@
 {
   "name": "woodland-ways-portal",
   "version": "1.0.0",
-  "description": "Staff portal for Woodland Ways",
+  "description": "Woodland Ways Staff Portal",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "devDependencies": {
-    "autoprefixer": "^10.4.15",
-    "postcss": "^8.4.23",
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.1.0",
     "tailwindcss": "^3.4.1",
-    "vite": "^5.0.0"
+    "postcss": "^8.4.21",
+    "autoprefixer": "^10.4.13"
   }
 }
