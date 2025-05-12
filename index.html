@@ -6,12 +6,12 @@
   <title>Woodland Ways Staff Portal</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-100 text-gray-900 font-sans">
 
   <!-- HEADER -->
   <header class="bg-orange-500 text-white px-4 py-3 flex items-center justify-between">
     <div class="flex items-center gap-2">
-      <img src="Icon.PNG" alt="Logo" class="h-7 w-7 rounded-sm bg-white p-1"/>
+      <img src="Icon.PNG" alt="Logo" class="h-7 w-7 bg-white rounded-sm p-1"/>
       <h1 class="text-lg font-semibold">Woodland Ways</h1>
     </div>
     <button>
@@ -23,21 +23,21 @@
 
   <!-- POST INPUT BAR -->
   <section class="bg-white px-4 py-3 shadow-sm">
-    <input type="text" placeholder="What's on your mind?" class="w-full rounded-full border px-4 py-2 text-sm text-gray-800 focus:outline-none"/>
+    <input type="text" placeholder="What's on your mind?" class="w-full rounded-full border px-4 py-2 text-sm focus:outline-none" />
     <div class="flex justify-between mt-3">
-      <button class="bg-orange-500 text-white text-sm px-4 py-2 rounded-full">Photos</button>
-      <button class="bg-orange-500 text-white text-sm px-4 py-2 rounded-full">Events</button>
-      <button class="bg-orange-500 text-white text-sm px-4 py-2 rounded-full">Directory</button>
+      <button class="bg-orange-500 text-white text-xs px-4 py-2 rounded-full">Photos</button>
+      <button class="bg-orange-500 text-white text-xs px-4 py-2 rounded-full">Events</button>
+      <button class="bg-orange-500 text-white text-xs px-4 py-2 rounded-full">Directory</button>
     </div>
   </section>
 
-  <!-- FEED POST -->
+  <!-- SAMPLE POST CARD -->
   <main class="px-4 mt-4">
     <div class="bg-white p-4 rounded-lg shadow-sm">
       <div class="flex items-center gap-2 mb-2">
         <img src="Icon.PNG" alt="Avatar" class="h-6 w-6 rounded-full bg-white p-0.5"/>
         <div>
-          <p class="text-sm font-semibold text-gray-900 leading-none">Jon Magellan</p>
+          <p class="text-sm font-semibold">Jon Magellan</p>
           <p class="text-xs text-gray-500">26m ago</p>
         </div>
       </div>
@@ -46,30 +46,36 @@
   </main>
 
   <!-- FOOTER NAVIGATION -->
-  <footer class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 px-2 py-2">
-    <div class="flex justify-around items-center text-xs text-gray-800">
+  <footer class="fixed bottom-0 left-0 w-full bg-white border-t px-2 py-2">
+    <div class="flex justify-around text-xs text-gray-700">
       <div class="flex flex-col items-center text-orange-500">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"/></svg>
+        <svg class="h-5 w-5 mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" />
+        </svg>
         <span>Home</span>
       </div>
       <div class="flex flex-col items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <svg class="h-5 w-5 mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a8 8 0 10-16 0 8 8 0 0016 0z" />
+        </svg>
         <span>My Courses</span>
       </div>
       <div class="flex flex-col items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M8 7V3h8v4m-9 4h10v10H7V11z"/></svg>
+        <svg class="h-5 w-5 mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3h8v4M5 11h14v10H5z" />
+        </svg>
         <span>Calendar</span>
       </div>
       <div class="flex flex-col items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3v2a3 3 0 01-6 0v-2z"/></svg>
+        <svg class="h-5 w-5 mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h16v16H4V4z" />
+        </svg>
         <span>Handbook</span>
       </div>
       <div class="flex flex-col items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 17h5l-1.405-1.405C19.21 14.79 19 14.4 19 14v-2a7 7 0 10-14 0v2c0 .4-.21.79-.595 1.595L3 17h5m7 0v1a3 3 0 01-6 0v-1"/></svg>
-        <span>Notifications</span>
-      </div>
-      <div class="flex flex-col items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg class="h-5 w-5 mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405M19 14V12a7 7 0 10-14 0v2l-1.405 1.405L3 17h5" />
+        </svg>
         <span>Menu</span>
       </div>
     </div>
