@@ -2,72 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/Icon.png" />
+    <link rel="icon" type="image/png" href="/Icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Woodland Ways Portal</title>
+    <title>Woodland Ways Staff Portal</title>
   </head>
   <body class="bg-gray-100 text-gray-900 font-sans">
-    <!-- HEADER -->
-    <header class="bg-orange-500 text-white p-4 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <img src="/Icon.png" alt="Logo" class="h-8 w-8 bg-white rounded-full p-1" />
-        <h1 class="text-xl font-bold">Woodland Ways</h1>
-      </div>
-      <button>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="white" class="h-6 w-6" viewBox="0 0 24 24">
-          <path d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-      </button>
-    </header>
-
-    <!-- POST BAR -->
-    <section class="bg-white p-4 shadow">
-      <input type="text" placeholder="What's on your mind?" class="w-full rounded-full border px-4 py-2 text-sm focus:outline-none" />
-      <div class="flex justify-between mt-3">
-        <button class="bg-orange-500 text-white text-xs px-4 py-2 rounded-full">Create Post</button>
-        <button class="bg-orange-500 text-white text-xs px-4 py-2 rounded-full">Photos</button>
-        <button class="bg-orange-500 text-white text-xs px-4 py-2 rounded-full">Directory</button>
-      </div>
-    </section>
-
-    <!-- POST EXAMPLE -->
-    <main class="p-4">
-      <div class="bg-white p-4 rounded shadow">
-        <div class="flex items-center gap-2 mb-2">
-          <img src="/Icon.png" class="h-6 w-6 rounded-full" />
-          <div>
-            <p class="text-sm font-semibold">Jon Magellan</p>
-            <p class="text-xs text-gray-500">26m ago</p>
-          </div>
-        </div>
-        <p class="text-sm">Hi all. I’ve knocked these up for the show to use…</p>
-      </div>
-    </main>
-
-    <!-- FOOTER NAVIGATION -->
-    <footer class="fixed bottom-0 left-0 w-full bg-white border-t px-4 py-2">
-      <div class="flex justify-around text-xs text-gray-700">
-        <div class="flex flex-col items-center text-orange-500">
-          <svg class="h-5 w-5 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"/></svg>
-          <span>Home</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <svg class="h-5 w-5 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m2 0a8 8 0 10-16 0 8 8 0 0016 0z"/></svg>
-          <span>My Courses</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <svg class="h-5 w-5 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 7V3h8v4M5 11h14v10H5z"/></svg>
-          <span>Calendar</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <svg class="h-5 w-5 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h16v16H4V4z"/></svg>
-          <span>Handbook</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <svg class="h-5 w-5 mb-1" fill="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405M19 14V12a7 7 0 10-14 0v2l-1.405 1.405L3 17h5"/></svg>
-          <span>Menu</span>
-        </div>
-      </div>
-    </footer>
+    <div id="app" class="p-4">
+      <h1 class="text-2xl font-bold text-orange-500">Welcome to Woodland Ways</h1>
+      <p class="italic mt-2 text-sm text-gray-600">
+        The Authoritative voice in bushcraft & survival course provision and Wilderness travel across the globe
+      </p>
+    </div>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
