@@ -11,7 +11,6 @@ import Events from './pages/Events';
 import Directory from './pages/Directory';
 import Login from './pages/Login';
 import SplashScreen from './pages/SplashScreen';
-import AdminDashboard from './pages/AdminDashboard'; // <-- Make sure this path matches your folder structure
 
 const App = () => {
   return (
@@ -26,7 +25,6 @@ const App = () => {
       <Route path="/directory" element={<Directory />} />
       <Route path="/login" element={<Login />} />
       <Route path="/splash" element={<SplashScreen />} />
-      <Route path="/admin" element={<AdminDashboard />} /> {/* This line enables the /admin route */}
     </Routes>
   );
 };
