@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import HomePage from './pages/Home';
 import MyCourses from './pages/MyCourses';
@@ -11,29 +11,23 @@ import Events from './pages/Events';
 import Directory from './pages/Directory';
 import Login from './pages/Login';
 import SplashScreen from './pages/SplashScreen';
-import SubmitReport from './pages/SubmitReport';
-import GenerateInvoice from './pages/GenerateInvoice';
-import AdminDashboard from './pages/AdminDashboard';
+import AdminDashboard from './pages/AdminDashboard'; // <-- Make sure this path matches your folder structure
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/my-courses" element={<MyCourses />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/handbook" element={<Handbook />} />
-        <Route path="/menu" element={<MenuPage />} />
-        <Route path="/photos" element={<Photos />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/directory" element={<Directory />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/splash" element={<SplashScreen />} />
-        <Route path="/submit-report" element={<SubmitReport />} />
-        <Route path="/generate-invoice" element={<GenerateInvoice />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/my-courses" element={<MyCourses />} />
+      <Route path="/calendar" element={<Calendar />} />
+      <Route path="/handbook" element={<Handbook />} />
+      <Route path="/menu" element={<MenuPage />} />
+      <Route path="/photos" element={<Photos />} />
+      <Route path="/events" element={<Events />} />
+      <Route path="/directory" element={<Directory />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/splash" element={<SplashScreen />} />
+      <Route path="/admin" element={<AdminDashboard />} /> {/* This line enables the /admin route */}
+    </Routes>
   );
 };
 
