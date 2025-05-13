@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -15,25 +15,44 @@ const GenerateInvoice = () => {
     ratePerDay: 150
   };
 
+  const initials = instructor.name.split(" ").map(w => w[0]).join("").toUpperCase();
+
   const woodlandWays = {
     name: 'Woodland Ways',
     address: '123 Forest Trail\nPeak District, UK'
   };
 
-  const total =
-    course?.duration === '2-day' ? instructor.ratePerDay * 2 : instructor.ratePerDay;
+  const total = course?.duration === '2-day' ? instructor.ratePerDay * 2 : instructor.ratePerDay;
+
+  const [invoiceId, setInvoiceId] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    // Check if already submitted
+    const archive = JSON.parse(localStorage.getItem('invoiceArchive') || '[]');
+    const match = archive.find(entry => entry.courseTitle === course.title);
+    if (match) {
+      setInvoiceId(match.invoiceId);
+      setIsSubmitted(true);
+    } else {
+      // Generate next invoice ID
+      const instructorInvoices = archive.filter(entry => entry.instructorInitials === initials);
+      const nextNumber = instructorInvoices.length + 1;
+      setInvoiceId(`${initials}${nextNumber.toString().padStart(4, '0')}`);
+    }
+  }, [course.title, initials]);
 
   const downloadPDF = () => {
     const doc = new jsPDF();
-
     doc.setFontSize(16);
     doc.text('INVOICE', 14, 20);
 
     doc.setFontSize(11);
-    doc.text(`Invoice Date: ${new Date().toLocaleDateString()}`, 14, 30);
+    doc.text(`Invoice ID: ${invoiceId}`, 14, 28);
+    doc.text(`Invoice Date: ${new Date().toLocaleDateString()}`, 14, 36);
 
     autoTable(doc, {
-      startY: 40,
+      startY: 45,
       head: [['Billed To', 'Invoice From']],
       body: [
         [ `${woodlandWays.name}\n${woodlandWays.address}`, `${instructor.name}\n${instructor.address}\n${instructor.email}` ]
@@ -48,11 +67,23 @@ const GenerateInvoice = () => {
       ]
     });
 
-    doc.save(`Invoice_${course.title.replace(/\s+/g, '_')}.pdf`);
+    doc.save(`Invoice_${invoiceId}.pdf`);
   };
 
   const handleSubmit = () => {
-    // TODO: Send to admin, save to archive
+    if (isSubmitted) return;
+
+    const archive = JSON.parse(localStorage.getItem('invoiceArchive') || '[]');
+    const newEntry = {
+      invoiceId,
+      instructorInitials: initials,
+      courseTitle: course.title,
+      amount: total,
+      submittedAt: new Date().toISOString()
+    };
+
+    const updatedArchive = [...archive, newEntry];
+    localStorage.setItem('invoiceArchive', JSON.stringify(updatedArchive));
     alert('Invoice submitted successfully!');
     navigate('/my-courses');
   };
@@ -70,7 +101,6 @@ const GenerateInvoice = () => {
               <span key={i}>{line}<br/></span>
             ))}</p>
           </div>
-
           <div>
             <p className="font-bold">Invoice From:</p>
             <p>{instructor.name}</p>
@@ -80,6 +110,7 @@ const GenerateInvoice = () => {
         </div>
 
         <div>
+          <p><strong>Invoice ID:</strong> {invoiceId}</p>
           <p><strong>Course:</strong> {course.title}</p>
           <p><strong>Date:</strong> {course.date}</p>
           <p><strong>Location:</strong> {course.location}</p>
@@ -113,12 +144,18 @@ const GenerateInvoice = () => {
         Download as PDF
       </button>
 
-      <button
-        onClick={handleSubmit}
-        className="mt-3 bg-green-600 text-white w-full py-2 rounded font-semibold"
-      >
-        Submit Invoice
-      </button>
+      {!isSubmitted && (
+        <button
+          onClick={handleSubmit}
+          className="mt-3 bg-green-600 text-white w-full py-2 rounded font-semibold"
+        >
+          Submit Invoice
+        </button>
+      )}
+
+      {isSubmitted && (
+        <p className="text-center text-xs text-green-700 mt-2">Invoice already submitted.</p>
+      )}
     </div>
   );
 };
