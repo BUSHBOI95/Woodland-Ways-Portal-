@@ -35,14 +35,29 @@ const MyCourses = () => {
   const [remindedCourses, setRemindedCourses] = useState([]);
 
   useEffect(() => {
-    const reports = JSON.parse(localStorage.getItem('submittedReports') || '{}');
-    const invoices = JSON.parse(localStorage.getItem('invoiceArchive') || '[]');
+    const fetchSubmissionStatus = () => {
+      const reports = JSON.parse(localStorage.getItem('submittedReports') || '{}');
+      const invoices = JSON.parse(localStorage.getItem('invoiceArchive') || '[]');
 
-    const reportTitles = Object.keys(reports);
-    const invoiceTitles = invoices.map(entry => entry.courseTitle);
+      const reportTitles = Object.keys(reports);
+      const invoiceTitles = invoices.map(entry => entry.courseTitle);
 
-    setSubmittedReports(reportTitles);
-    setSubmittedInvoices(invoiceTitles);
+      setSubmittedReports(reportTitles);
+      setSubmittedInvoices(invoiceTitles);
+    };
+
+    fetchSubmissionStatus();
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        fetchSubmissionStatus();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
   }, []);
 
   useEffect(() => {
