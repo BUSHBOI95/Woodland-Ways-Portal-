@@ -12,7 +12,7 @@ const HomePage = () => {
 
       {/* Logo */}
       <div className="mt-6 flex justify-center">
-        <img src="/Icon.png" alt="Woodland Ways Logo" className="w-56 h-auto mb-4" />
+        <img src="/Icon.png" alt="Woodland Ways Logo" className="w-64 h-auto mb-5" />
       </div>
 
       {/* Post Input */}
@@ -24,20 +24,20 @@ const HomePage = () => {
         />
       </div>
 
-      {/* Buttons - more rounded and evenly spaced */}
+      {/* Buttons - pixel-perfect */}
       <div className="flex justify-around gap-3 px-4 mt-4">
-        <button className="bg-orange-400 text-white px-4 py-2 rounded-full text-sm flex-1">Photos</button>
-        <button className="bg-orange-400 text-white px-4 py-2 rounded-full text-sm flex-1">Events</button>
-        <button className="bg-orange-400 text-white px-4 py-2 rounded-full text-sm flex-1">Directory</button>
+        <button className="bg-orange-400 text-white px-4 py-3 rounded-full text-sm font-semibold tracking-wide flex-1">Photos</button>
+        <button className="bg-orange-400 text-white px-4 py-3 rounded-full text-sm font-semibold tracking-wide flex-1">Events</button>
+        <button className="bg-orange-400 text-white px-4 py-3 rounded-full text-sm font-semibold tracking-wide flex-1">Directory</button>
       </div>
 
       {/* Feed */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
         <div className="bg-gray-100 p-4 rounded-xl shadow-sm">
           <div className="flex items-center gap-3 mb-2">
-            <img src="/Icon.png" alt="Avatar" className="w-8 h-8 rounded-full" />
+            <img src="/Icon.png" alt="Avatar" className="w-10 h-10 rounded-full" />
             <div>
-              <p className="font-semibold text-sm">Jon Magellan</p>
+              <p className="font-bold text-sm">Jon Magellan</p>
               <p className="text-xs text-gray-500">26m ago</p>
             </div>
           </div>
