@@ -1,7 +1,10 @@
 import React from 'react';
 import { Home, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen shadow-sm flex flex-col justify-between">
 
@@ -24,11 +27,11 @@ const HomePage = () => {
         />
       </div>
 
-      {/* Buttons - pixel-perfect */}
+      {/* Buttons - with routing */}
       <div className="flex justify-around gap-3 px-4 mt-4">
-        <button className="bg-orange-400 text-white px-4 py-3 rounded-full text-sm font-semibold tracking-wide flex-1">Photos</button>
-        <button className="bg-orange-400 text-white px-4 py-3 rounded-full text-sm font-semibold tracking-wide flex-1">Events</button>
-        <button className="bg-orange-400 text-white px-4 py-3 rounded-full text-sm font-semibold tracking-wide flex-1">Directory</button>
+        <button onClick={() => navigate('/photos')} className="bg-orange-400 text-white px-4 py-3 rounded-full text-sm font-semibold tracking-wide flex-1">Photos</button>
+        <button onClick={() => navigate('/events')} className="bg-orange-400 text-white px-4 py-3 rounded-full text-sm font-semibold tracking-wide flex-1">Events</button>
+        <button onClick={() => navigate('/directory')} className="bg-orange-400 text-white px-4 py-3 rounded-full text-sm font-semibold tracking-wide flex-1">Directory</button>
       </div>
 
       {/* Feed */}
@@ -45,26 +48,26 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Navigation - routed */}
       <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200">
         <nav className="flex justify-around py-2 text-xs text-gray-700">
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center" onClick={() => navigate('/')}>
             <Home fontSize="medium" className="text-orange-500" />
             <span className="text-[11px]">Home</span>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center" onClick={() => navigate('/my-courses')}>
             <Assignment fontSize="medium" />
             <span className="text-[11px]">My Courses</span>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center" onClick={() => navigate('/calendar')}>
             <CalendarMonth fontSize="medium" />
             <span className="text-[11px]">Calendar</span>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center" onClick={() => navigate('/handbook')}>
             <MenuBook fontSize="medium" />
             <span className="text-[11px]">Handbook</span>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center" onClick={() => navigate('/menu')}>
             <Menu fontSize="medium" />
             <span className="text-[11px]">Menu</span>
           </div>
