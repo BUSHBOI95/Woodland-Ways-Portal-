@@ -1,28 +1,12 @@
 import React from 'react';
-import { Assignment, CalendarMonth, MenuBook, Menu, Home, Settings, Logout, Info, HelpOutline } from '@mui/icons-material';
+import { NavLink } from 'react-router-dom';
+import { Home, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-material';
 
 const MenuPage = () => {
-  const menuItems = [
-    {
-      icon: <Settings fontSize="small" />,
-      label: "App Settings",
-      action: () => alert("Navigate to Settings")
-    },
-    {
-      icon: <HelpOutline fontSize="small" />,
-      label: "Support",
-      action: () => alert("Open support options")
-    },
-    {
-      icon: <Info fontSize="small" />,
-      label: "About Woodland Ways",
-      action: () => alert("Show about modal")
-    },
-    {
-      icon: <Logout fontSize="small" className="text-red-500" />,
-      label: "Log Out",
-      action: () => alert("Logging out...")
-    }
+  const items = [
+    { label: 'Resources', path: '/photos' },
+    { label: 'Events', path: '/events' },
+    { label: 'Instructor Directory', path: '/directory' },
   ];
 
   return (
@@ -34,45 +18,42 @@ const MenuPage = () => {
         <div className="text-2xl">☰</div>
       </header>
 
-      {/* Menu Options */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-        {menuItems.map((item, i) => (
-          <button
-            key={i}
-            onClick={item.action}
-            className="flex items-center justify-between w-full bg-gray-100 p-3 rounded-lg shadow-sm hover:bg-gray-200 transition text-sm"
+      {/* Menu Buttons */}
+      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+        {items.map((item, index) => (
+          <NavLink
+            key={index}
+            to={item.path}
+            className="block bg-orange-400 text-white text-center rounded-full py-3 text-sm font-semibold hover:bg-orange-500 transition"
           >
-            <div className="flex items-center gap-2 text-gray-700">
-              {item.icon}
-              <span>{item.label}</span>
-            </div>
-          </button>
+            {item.label}
+          </NavLink>
         ))}
       </div>
 
       {/* Bottom Navigation */}
       <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200">
         <nav className="flex justify-around py-2 text-xs text-gray-700">
-          <div className="flex flex-col items-center">
+          <NavLink to="/" className="flex flex-col items-center">
             <Home fontSize="medium" />
             <span className="text-[11px]">Home</span>
-          </div>
-          <div className="flex flex-col items-center">
+          </NavLink>
+          <NavLink to="/my-courses" className="flex flex-col items-center">
             <Assignment fontSize="medium" />
             <span className="text-[11px]">My Courses</span>
-          </div>
-          <div className="flex flex-col items-center">
+          </NavLink>
+          <NavLink to="/calendar" className="flex flex-col items-center">
             <CalendarMonth fontSize="medium" />
             <span className="text-[11px]">Calendar</span>
-          </div>
-          <div className="flex flex-col items-center">
+          </NavLink>
+          <NavLink to="/handbook" className="flex flex-col items-center">
             <MenuBook fontSize="medium" />
             <span className="text-[11px]">Handbook</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <Menu fontSize="medium" className="text-orange-500" />
+          </NavLink>
+          <NavLink to="/menu" className="flex flex-col items-center text-orange-500">
+            <Menu fontSize="medium" />
             <span className="text-[11px]">Menu</span>
-          </div>
+          </NavLink>
         </nav>
       </footer>
     </div>
