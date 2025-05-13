@@ -1,132 +1,122 @@
-import React, { useEffect, useState } from 'react';
+// src/pages/SubmitReport.jsx
+
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { getReport, updateReport, addUpdateToReport } from '../data/reportStore';
 
 const SubmitReport = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const course = location.state?.course;
 
-  const [initialReport, setInitialReport] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [updateText, setUpdateText] = useState('');
-  const [additionalUpdates, setAdditionalUpdates] = useState([]);
-
-  const reportKey = course?.title;
+  const [report, setReport] = useState(null);
+  const [additionalUpdates, setAdditionalUpdates] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    const storedReports = JSON.parse(localStorage.getItem('submittedReports') || '{}');
-    if (storedReports[reportKey]) {
-      const existing = storedReports[reportKey];
-      setInitialReport(existing.initialReport);
-      setAdditionalUpdates(existing.additionalUpdates || []);
-      setIsSubmitted(true);
+    if (course?.title) {
+      const existing = getReport(course.title);
+      if (existing) {
+        setReport(existing);
+        setSubmitted(true);
+      } else {
+        setReport({
+          courseTitle: course.title,
+          whatWentWell: '',
+          whatToImprove: '',
+          generalFeedback: '',
+          updates: [],
+        });
+      }
     }
-  }, [reportKey]);
+  }, [course]);
 
-  const handleInitialSubmit = () => {
-    if (!initialReport.trim()) {
-      alert('Please enter a course report before submitting.');
-      return;
+  const handleSubmit = () => {
+    if (!submitted) {
+      updateReport(course.title, report);
+      setSubmitted(true);
+      navigate('/my-courses');
+    } else if (additionalUpdates.trim() !== '') {
+      const timestamp = new Date().toLocaleString();
+      const newUpdate = { content: additionalUpdates, timestamp };
+      addUpdateToReport(course.title, newUpdate);
+      setReport(prev => ({
+        ...prev,
+        updates: [...prev.updates, newUpdate],
+      }));
+      setAdditionalUpdates('');
+      navigate('/my-courses');
     }
-
-    const storedReports = JSON.parse(localStorage.getItem('submittedReports') || '{}');
-    storedReports[reportKey] = {
-      initialReport,
-      additionalUpdates: []
-    };
-    localStorage.setItem('submittedReports', JSON.stringify(storedReports));
-    alert('Report submitted successfully!');
-    navigate('/my-courses');
   };
 
-  const handleAdditionalUpdate = () => {
-    if (!updateText.trim()) {
-      alert('Please enter update text.');
-      return;
-    }
-
-    const storedReports = JSON.parse(localStorage.getItem('submittedReports') || '{}');
-    const courseReport = storedReports[reportKey] || { initialReport: '', additionalUpdates: [] };
-
-    const updatedList = [...courseReport.additionalUpdates, {
-      text: updateText,
-      timestamp: new Date().toLocaleString()
-    }];
-
-    storedReports[reportKey] = {
-      ...courseReport,
-      additionalUpdates: updatedList
-    };
-
-    localStorage.setItem('submittedReports', JSON.stringify(storedReports));
-    setAdditionalUpdates(updatedList);
-    setUpdateText('');
-    alert('Additional update submitted.');
-  };
-
-  if (!course) {
-    return <div className="p-4 text-red-500">Course not found.</div>;
-  }
+  if (!course) return <p>No course selected.</p>;
 
   return (
-    <div className="p-4 max-w-md mx-auto bg-white min-h-screen shadow">
-      <h1 className="text-xl font-semibold mb-2">{course.title}</h1>
-      <p className="text-sm text-gray-600 mb-4">{course.date} – {course.location}</p>
+    <div className="p-4 max-w-lg mx-auto">
+      <h2 className="text-xl font-bold mb-4">Submit Report</h2>
+      <p className="text-sm text-gray-600 mb-2">{course.title}</p>
 
-      {/* Initial Report */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Course Report:</label>
-        <textarea
-          className="w-full border px-3 py-2 rounded"
-          rows={6}
-          disabled={isSubmitted}
-          value={initialReport}
-          onChange={(e) => setInitialReport(e.target.value)}
-          placeholder="Enter the full course report here..."
-        />
-      </div>
-
-      {!isSubmitted && (
-        <button
-          onClick={handleInitialSubmit}
-          className="w-full bg-orange-500 text-white py-2 rounded font-semibold"
-        >
-          Submit Report
-        </button>
-      )}
-
-      {/* Additional Updates Section */}
-      {isSubmitted && (
+      {report && (
         <>
-          <h2 className="text-sm font-semibold mt-6 mb-2">Additional Updates</h2>
+          <div className="space-y-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium">What went well?</label>
+              <textarea
+                className="w-full border rounded p-2"
+                value={report.whatWentWell}
+                onChange={e =>
+                  setReport({ ...report, whatWentWell: e.target.value })
+                }
+                disabled={submitted}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium">What could be improved?</label>
+              <textarea
+                className="w-full border rounded p-2"
+                value={report.whatToImprove}
+                onChange={e =>
+                  setReport({ ...report, whatToImprove: e.target.value })
+                }
+                disabled={submitted}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium">General feedback</label>
+              <textarea
+                className="w-full border rounded p-2"
+                value={report.generalFeedback}
+                onChange={e =>
+                  setReport({ ...report, generalFeedback: e.target.value })
+                }
+                disabled={submitted}
+              />
+            </div>
+          </div>
 
-          {additionalUpdates.length > 0 && (
-            <div className="mb-4 space-y-2 text-sm">
-              {additionalUpdates.map((update, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-100 p-2 rounded border text-gray-700"
-                >
-                  <p className="text-xs text-gray-500 mb-1">{update.timestamp}</p>
-                  <p>{update.text}</p>
+          {submitted && (
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold mb-2">Additional Updates</h3>
+              {report.updates?.map((u, i) => (
+                <div key={i} className="mb-2 p-2 border rounded bg-gray-100">
+                  <p className="text-sm">{u.content}</p>
+                  <p className="text-xs text-gray-500 mt-1">{u.timestamp}</p>
                 </div>
               ))}
+              <textarea
+                className="w-full border rounded p-2 mt-2"
+                placeholder="Add a new update..."
+                value={additionalUpdates}
+                onChange={e => setAdditionalUpdates(e.target.value)}
+              />
             </div>
           )}
 
-          <textarea
-            className="w-full border px-3 py-2 rounded mb-2"
-            rows={4}
-            value={updateText}
-            onChange={(e) => setUpdateText(e.target.value)}
-            placeholder="Add a new update..."
-          />
-
           <button
-            onClick={handleAdditionalUpdate}
-            className="w-full bg-green-600 text-white py-2 rounded font-semibold"
+            onClick={handleSubmit}
+            className="w-full bg-orange-500 text-white py-2 rounded mt-4"
           >
-            Submit Update
+            {submitted ? 'Submit Update' : 'Submit Report'}
           </button>
         </>
       )}
