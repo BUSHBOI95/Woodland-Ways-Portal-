@@ -12,7 +12,7 @@ const HomePage = () => {
 
       {/* Logo */}
       <div className="mt-4 flex justify-center">
-        <img src="/icon.png" alt="Woodland Ways Logo" className="w-40 h-auto" />
+        <img src="/Icon.png" alt="Woodland Ways Logo" className="w-40 h-auto" />
       </div>
 
       {/* Post Input */}
@@ -35,7 +35,7 @@ const HomePage = () => {
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
         <div className="bg-gray-100 p-4 rounded-xl shadow-sm">
           <div className="flex items-center gap-3 mb-2">
-            <img src="/icon.png" alt="Avatar" className="w-8 h-8 rounded-full" />
+            <img src="/Icon.png" alt="Avatar" className="w-8 h-8 rounded-full" />
             <div>
               <p className="font-semibold text-sm">Jon Magellan</p>
               <p className="text-xs text-gray-500">26m ago</p>
