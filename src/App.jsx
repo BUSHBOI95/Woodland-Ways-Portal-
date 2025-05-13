@@ -1,5 +1,6 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import HomePage from './pages/Home';
 import MyCourses from './pages/MyCourses';
 import Calendar from './pages/Calendar';
@@ -13,18 +14,20 @@ import SplashScreen from './pages/SplashScreen';
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/my-courses" element={<MyCourses />} />
-      <Route path="/calendar" element={<Calendar />} />
-      <Route path="/handbook" element={<Handbook />} />
-      <Route path="/menu" element={<MenuPage />} />
-      <Route path="/photos" element={<Photos />} />
-      <Route path="/events" element={<Events />} />
-      <Route path="/directory" element={<Directory />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/splash" element={<SplashScreen />} />
-    </Routes>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/my-courses" element={<MyCourses />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/handbook" element={<Handbook />} />
+        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/photos" element={<Photos />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/directory" element={<Directory />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/splash" element={<SplashScreen />} />
+      </Routes>
+    </Router>
   );
 };
 
