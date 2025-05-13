@@ -5,25 +5,28 @@ import { Home, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-mate
 const MyCourses = () => {
   const navigate = useNavigate();
 
-  // Simulated instructor and submission tracking
   const instructorInitials = 'JP';
-  const [submittedReports, setSubmittedReports] = useState(['2-Day Foraging Course – Peak District']);
-  const [submittedInvoices, setSubmittedInvoices] = useState(['2-Day Foraging Course – Peak District']);
+  const [submittedReports, setSubmittedReports] = useState(['2-Day Foraging Course']);
+  const [submittedInvoices, setSubmittedInvoices] = useState(['2-Day Foraging Course']);
 
-  const courses = [
+  const today = new Date().toISOString().split('T')[0];
+
+  const allCourses = [
     {
       id: 1,
-      title: "2-Day Foraging Course – Peak District",
-      date: "Sat 25th – Sun 26th May",
-      location: "Bamford Woodlands",
+      title: "2-Day Foraging Course",
+      startDate: "2025-05-12",
+      endDate: "2025-05-13",
+      location: "Peak District",
       duration: "2-day",
       risk: "Moderate",
       weather: "14°C, Cloudy"
     },
     {
       id: 2,
-      title: "Fire & Flint Workshop – Yorkshire",
-      date: "Mon 3rd June",
+      title: "Fire & Flint Workshop",
+      startDate: "2025-06-03",
+      endDate: "2025-06-03",
       location: "Wharncliffe Crags",
       duration: "1-day",
       risk: "Low",
@@ -31,72 +34,75 @@ const MyCourses = () => {
     }
   ];
 
-  const handleDownloadInvoice = (course) => {
-    // Trigger route to invoice page in read-only mode
-    navigate('/generate-invoice', { state: { course, readonly: true } });
+  const upcomingCourses = allCourses.filter(c => c.endDate >= today);
+  const pastCourses = allCourses.filter(c => c.endDate < today);
+
+  const renderCourseCard = (course, isPast = false) => {
+    const reportSubmitted = submittedReports.includes(course.title);
+    const invoiceSubmitted = submittedInvoices.includes(course.title);
+
+    return (
+      <div key={course.id} className="bg-gray-100 p-4 rounded-xl shadow-sm">
+        <h2 className="font-semibold text-gray-800 text-sm mb-1">{course.title}</h2>
+        <p className="text-xs text-gray-600 mb-1">{course.startDate} – {course.location}</p>
+        <p className="text-xs text-gray-700 mb-1">Weather: {course.weather}</p>
+        <p className="text-xs text-gray-700 mb-1">Risk Rating: {course.risk}</p>
+
+        <div className="flex flex-col gap-2 mt-2">
+          <button
+            className="bg-orange-500 text-white text-xs px-3 py-2 rounded-full"
+            onClick={() => navigate('/submit-report', { state: { course } })}
+          >
+            {reportSubmitted ? "View/Edit Report" : "Submit Report"}
+          </button>
+
+          {!invoiceSubmitted ? (
+            <button
+              className="bg-orange-400 text-white text-xs px-3 py-2 rounded-full"
+              onClick={() => navigate('/generate-invoice', { state: { course } })}
+            >
+              Generate Invoice
+            </button>
+          ) : (
+            <button
+              className="bg-green-600 text-white text-xs px-3 py-2 rounded-full"
+              onClick={() => navigate('/generate-invoice', { state: { course, readonly: true } })}
+            >
+              Download Invoice
+            </button>
+          )}
+        </div>
+      </div>
+    );
   };
 
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen shadow-sm flex flex-col justify-between">
-      
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-orange-500 text-white">
         <h1 className="text-lg font-semibold">My Courses</h1>
         <div className="text-2xl">🗂️</div>
       </header>
 
-      {/* My Reports Button */}
-      <div className="px-4 py-3">
-        <NavLink to="/report-archive">
-          <button className="bg-orange-400 text-white px-4 py-2 rounded-full w-full font-medium text-sm">
-            My Reports
-          </button>
-        </NavLink>
+      <div className="flex-1 overflow-y-auto px-4 pb-20 space-y-6">
+        {/* Upcoming */}
+        <div>
+          <h2 className="text-base font-semibold text-gray-700 my-3">Upcoming Courses</h2>
+          <div className="space-y-4">
+            {upcomingCourses.map(c => renderCourseCard(c))}
+          </div>
+        </div>
+
+        {/* Past */}
+        <div>
+          <h2 className="text-base font-semibold text-gray-700 mt-6 mb-3">Past Courses</h2>
+          <div className="space-y-4">
+            {pastCourses.map(c => renderCourseCard(c, true))}
+          </div>
+        </div>
       </div>
 
-      {/* Course List */}
-      <div className="flex-1 overflow-y-auto px-4 pb-20 space-y-4">
-        {courses.map((course) => {
-          const reportSubmitted = submittedReports.includes(course.title);
-          const invoiceSubmitted = submittedInvoices.includes(course.title);
-
-          return (
-            <div key={course.id} className="bg-gray-100 p-4 rounded-xl shadow-sm">
-              <h2 className="font-semibold text-gray-800 text-sm mb-1">{course.title}</h2>
-              <p className="text-xs text-gray-600 mb-1">{course.date} – {course.location}</p>
-              <p className="text-xs text-gray-700 mb-1">Weather: {course.weather}</p>
-              <p className="text-xs text-gray-700 mb-1">Risk Rating: {course.risk}</p>
-
-              <div className="flex flex-col gap-2 mt-2">
-                <button
-                  className="bg-orange-500 text-white text-xs px-3 py-2 rounded-full"
-                  onClick={() => navigate('/submit-report', { state: { course } })}
-                >
-                  {reportSubmitted ? "View/Edit Report" : "Submit Report"}
-                </button>
-
-                {!invoiceSubmitted ? (
-                  <button
-                    className="bg-orange-400 text-white text-xs px-3 py-2 rounded-full"
-                    onClick={() => navigate('/generate-invoice', { state: { course } })}
-                  >
-                    Generate Invoice
-                  </button>
-                ) : (
-                  <button
-                    className="bg-green-600 text-white text-xs px-3 py-2 rounded-full"
-                    onClick={() => handleDownloadInvoice(course)}
-                  >
-                    Download Invoice
-                  </button>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Bottom Navigation */}
+      {/* Bottom Nav */}
       <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200">
         <nav className="flex justify-around py-2 text-xs text-gray-700">
           <NavLink to="/" className="flex flex-col items-center">
