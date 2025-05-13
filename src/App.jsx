@@ -11,6 +11,8 @@ import Events from './pages/Events';
 import Directory from './pages/Directory';
 import Login from './pages/Login';
 import SplashScreen from './pages/SplashScreen';
+import SubmitReport from './pages/SubmitReport';
+import GenerateInvoice from './pages/GenerateInvoice';
 
 const App = () => {
   return (
@@ -26,6 +28,8 @@ const App = () => {
         <Route path="/directory" element={<Directory />} />
         <Route path="/login" element={<Login />} />
         <Route path="/splash" element={<SplashScreen />} />
+        <Route path="/submit-report" element={<SubmitReport />} />
+        <Route path="/generate-invoice" element={<GenerateInvoice />} />
       </Routes>
     </Router>
   );
