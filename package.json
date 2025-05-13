@@ -1,6 +1,7 @@
 {
   "name": "woodland-ways-portal",
   "version": "1.0.0",
+  "type": "module",
   "description": "Woodland Ways Staff Portal",
   "scripts": {
     "dev": "vite",
