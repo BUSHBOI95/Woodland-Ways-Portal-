@@ -10,9 +10,9 @@ const HomePage = () => {
         <h1 className="text-lg font-semibold">Staff Portal</h1>
       </header>
 
-      {/* Logo */}
+      {/* Logo - enlarged */}
       <div className="mt-6 flex justify-center">
-        <img src="/Icon.png" alt="Woodland Ways Logo" className="w-64 h-auto mb-5" />
+        <img src="/Icon.png" alt="Woodland Ways Logo" className="w-80 max-w-[90%] h-auto mb-6" />
       </div>
 
       {/* Post Input */}
