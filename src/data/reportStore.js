@@ -1,31 +1,39 @@
-const reports = [];
+// src/data/reportStore.js
 
-// Add or update a report
-export const saveReport = (newReport) => {
-  const index = reports.findIndex(r => r.course.title === newReport.course.title);
-  if (index !== -1) {
-    reports[index] = newReport;
-  } else {
-    reports.push(newReport);
+export const addReport = (courseTitle, reportData) => {
+  const existingReports = JSON.parse(localStorage.getItem('submittedReports') || '{}');
+  existingReports[courseTitle] = {
+    initialReport: reportData,
+    updates: []
+  };
+  localStorage.setItem('submittedReports', JSON.stringify(existingReports));
+};
+
+export const updateReport = (courseTitle, updatedReportData) => {
+  const reports = JSON.parse(localStorage.getItem('submittedReports') || '{}');
+  if (reports[courseTitle]) {
+    reports[courseTitle].initialReport = updatedReportData;
+    localStorage.setItem('submittedReports', JSON.stringify(reports));
   }
 };
 
-// Get all reports
-export const getReports = () => {
-  return reports;
+export const addUpdateToReport = (courseTitle, updateText) => {
+  const reports = JSON.parse(localStorage.getItem('submittedReports') || '{}');
+  if (reports[courseTitle]) {
+    reports[courseTitle].updates = reports[courseTitle].updates || [];
+    reports[courseTitle].updates.push({
+      text: updateText,
+      timestamp: new Date().toISOString()
+    });
+    localStorage.setItem('submittedReports', JSON.stringify(reports));
+  }
 };
 
-// Filter reports by year
-export const getReportsByYear = (year) => {
-  return reports.filter(r => new Date(r.submittedAt).getFullYear() === parseInt(year));
+export const getReport = (courseTitle) => {
+  const reports = JSON.parse(localStorage.getItem('submittedReports') || '{}');
+  return reports[courseTitle] || null;
 };
 
-// Filter by course type keyword (e.g. "foraging", "fire")
-export const getReportsByType = (keyword) => {
-  return reports.filter(r => r.course.title.toLowerCase().includes(keyword.toLowerCase()));
-};
-
-// Get single report by course title
-export const getReportByCourse = (courseTitle) => {
-  return reports.find(r => r.course.title === courseTitle);
+export const getAllReports = () => {
+  return JSON.parse(localStorage.getItem('submittedReports') || '{}');
 };
