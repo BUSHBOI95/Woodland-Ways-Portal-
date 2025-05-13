@@ -15,10 +15,15 @@ const GenerateInvoice = () => {
     ratePerDay: 150
   };
 
+  const woodlandWays = {
+    name: 'Woodland Ways',
+    address: '123 Forest Trail\nPeak District, UK'
+  };
+
   const total =
     course?.duration === '2-day' ? instructor.ratePerDay * 2 : instructor.ratePerDay;
 
-  const generatePDF = () => {
+  const downloadPDF = () => {
     const doc = new jsPDF();
 
     doc.setFontSize(16);
@@ -29,17 +34,9 @@ const GenerateInvoice = () => {
 
     autoTable(doc, {
       startY: 40,
-      head: [['Billed To', 'Course Info']],
+      head: [['Billed To', 'Invoice From']],
       body: [
-        [
-          `${instructor.name}
-${instructor.address}
-${instructor.email}`,
-          `${course.title}
-${course.location}
-${course.date}
-${course.duration}`
-        ]
+        [ `${woodlandWays.name}\n${woodlandWays.address}`, `${instructor.name}\n${instructor.address}\n${instructor.email}` ]
       ]
     });
 
@@ -54,35 +51,70 @@ ${course.duration}`
     doc.save(`Invoice_${course.title.replace(/\s+/g, '_')}.pdf`);
   };
 
-  const handleSubmitInvoice = () => {
-    // Future: Send to admin + archive
+  const handleSubmit = () => {
+    // TODO: Send to admin, save to archive
     alert('Invoice submitted successfully!');
     navigate('/my-courses');
   };
 
   return (
     <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">Invoice</h1>
+      <h1 className="text-xl font-bold mb-4">Invoice Preview</h1>
 
-      <div className="bg-gray-100 p-4 rounded shadow-sm text-sm space-y-2">
-        <p><strong>Instructor:</strong> {instructor.name}</p>
-        <p><strong>Email:</strong> {instructor.email}</p>
-        <p><strong>Address:</strong> {instructor.address}</p>
-        <p><strong>Course:</strong> {course?.title}</p>
-        <p><strong>Date:</strong> {course?.date}</p>
-        <p><strong>Rate:</strong> £{instructor.ratePerDay}/day</p>
-        <p><strong>Total Due:</strong> £{total}</p>
+      <div className="bg-white shadow p-4 border border-gray-300 rounded text-sm space-y-4">
+        <div className="flex justify-between">
+          <div>
+            <p className="font-bold">Billed To:</p>
+            <p>{woodlandWays.name}</p>
+            <p>{woodlandWays.address.split('\n').map((line, i) => (
+              <span key={i}>{line}<br/></span>
+            ))}</p>
+          </div>
+
+          <div>
+            <p className="font-bold">Invoice From:</p>
+            <p>{instructor.name}</p>
+            <p>{instructor.address}</p>
+            <p>{instructor.email}</p>
+          </div>
+        </div>
+
+        <div>
+          <p><strong>Course:</strong> {course.title}</p>
+          <p><strong>Date:</strong> {course.date}</p>
+          <p><strong>Location:</strong> {course.location}</p>
+          <p><strong>Duration:</strong> {course.duration}</p>
+        </div>
+
+        <table className="w-full mt-2 text-left text-sm border-t pt-2">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th className="text-right">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Instructor Day Rate</td>
+              <td className="text-right">£{instructor.ratePerDay}</td>
+            </tr>
+            <tr className="font-semibold border-t">
+              <td>Total Due</td>
+              <td className="text-right">£{total}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <button
-        onClick={generatePDF}
+        onClick={downloadPDF}
         className="mt-6 bg-orange-500 text-white w-full py-2 rounded font-semibold"
       >
-        Download Invoice (PDF)
+        Download as PDF
       </button>
 
       <button
-        onClick={handleSubmitInvoice}
+        onClick={handleSubmit}
         className="mt-3 bg-green-600 text-white w-full py-2 rounded font-semibold"
       >
         Submit Invoice
