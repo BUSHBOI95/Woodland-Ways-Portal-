@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { addReport } from '../data/reportStore';
+import { saveReport, getReportByCourse } from '../data/reportStore';
 
 const SubmitReport = () => {
   const location = useLocation();
@@ -14,18 +14,27 @@ const SubmitReport = () => {
     file: null
   });
 
+  useEffect(() => {
+    // If a report already exists for this course, prefill the fields
+    const existing = getReportByCourse(course?.title);
+    if (existing) {
+      setReport(existing.report);
+    }
+  }, [course]);
+
   const handleSubmit = () => {
     if (!report.attendance || !report.notes || !report.kitUsed) {
       alert("Please complete all fields before submitting.");
       return;
     }
 
-    addReport({
+    saveReport({
       course,
       report,
       submittedAt: new Date().toISOString()
     });
 
+    alert("Report submitted successfully!");
     navigate('/my-courses', { state: { reportSubmittedFor: course.title } });
   };
 
@@ -65,7 +74,7 @@ const SubmitReport = () => {
         onClick={handleSubmit}
         className="bg-orange-500 text-white w-full py-2 rounded font-semibold"
       >
-        Submit Report
+        {getReportByCourse(course?.title) ? 'Update Report' : 'Submit Report'}
       </button>
     </div>
   );
