@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const CourseDetails = () => {
@@ -6,8 +6,22 @@ const CourseDetails = () => {
   const navigate = useNavigate();
   const course = location.state?.course;
 
-  const reportSubmitted = true; // placeholder until integrated with report store
-  const invoiceSubmitted = true; // placeholder until integrated with invoice archive
+  const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [invoiceSubmitted, setInvoiceSubmitted] = useState(false);
+
+  useEffect(() => {
+    const reportStore = JSON.parse(localStorage.getItem('submittedReports') || '{}');
+    const invoiceArchive = JSON.parse(localStorage.getItem('invoiceArchive') || '[]');
+
+    if (course?.title && reportStore[course.title]) {
+      setReportSubmitted(true);
+    }
+
+    const invoiceMatch = invoiceArchive.find(entry => entry.courseTitle === course?.title);
+    if (invoiceMatch) {
+      setInvoiceSubmitted(true);
+    }
+  }, [course]);
 
   if (!course) {
     return <div className="p-4 text-center text-sm text-red-500">Course not found.</div>;
