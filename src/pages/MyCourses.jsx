@@ -1,11 +1,14 @@
-import React from 'react';
-import { NavLink, useNavigate, useLocation, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Home, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-material';
 
 const MyCourses = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const reportSubmittedFor = location.state?.reportSubmittedFor;
+
+  // Simulated instructor and submission tracking
+  const instructorInitials = 'JP';
+  const [submittedReports, setSubmittedReports] = useState(['2-Day Foraging Course – Peak District']);
+  const [submittedInvoices, setSubmittedInvoices] = useState(['2-Day Foraging Course – Peak District']);
 
   const courses = [
     {
@@ -28,6 +31,11 @@ const MyCourses = () => {
     }
   ];
 
+  const handleDownloadInvoice = (course) => {
+    // Trigger route to invoice page in read-only mode
+    navigate('/generate-invoice', { state: { course, readonly: true } });
+  };
+
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen shadow-sm flex flex-col justify-between">
       
@@ -37,19 +45,20 @@ const MyCourses = () => {
         <div className="text-2xl">🗂️</div>
       </header>
 
-      {/* "My Reports" Button */}
+      {/* My Reports Button */}
       <div className="px-4 py-3">
-        <Link to="/report-archive">
+        <NavLink to="/report-archive">
           <button className="bg-orange-400 text-white px-4 py-2 rounded-full w-full font-medium text-sm">
             My Reports
           </button>
-        </Link>
+        </NavLink>
       </div>
 
       {/* Course List */}
       <div className="flex-1 overflow-y-auto px-4 pb-20 space-y-4">
         {courses.map((course) => {
-          const isSubmitted = reportSubmittedFor === course.title;
+          const reportSubmitted = submittedReports.includes(course.title);
+          const invoiceSubmitted = submittedInvoices.includes(course.title);
 
           return (
             <div key={course.id} className="bg-gray-100 p-4 rounded-xl shadow-sm">
@@ -57,26 +66,30 @@ const MyCourses = () => {
               <p className="text-xs text-gray-600 mb-1">{course.date} – {course.location}</p>
               <p className="text-xs text-gray-700 mb-1">Weather: {course.weather}</p>
               <p className="text-xs text-gray-700 mb-1">Risk Rating: {course.risk}</p>
-              <div className="flex gap-2 mt-2">
+
+              <div className="flex flex-col gap-2 mt-2">
                 <button
-                  className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full"
+                  className="bg-orange-500 text-white text-xs px-3 py-2 rounded-full"
                   onClick={() => navigate('/submit-report', { state: { course } })}
                 >
-                  {isSubmitted ? "View/Edit Report" : "Submit Report"}
+                  {reportSubmitted ? "View/Edit Report" : "Submit Report"}
                 </button>
-                <button
-                  className={`text-xs px-3 py-1 rounded-full ${
-                    isSubmitted
-                      ? "bg-orange-400 text-white"
-                      : "bg-gray-300 text-gray-600 cursor-not-allowed"
-                  }`}
-                  onClick={() =>
-                    isSubmitted && navigate('/generate-invoice', { state: { course } })
-                  }
-                  disabled={!isSubmitted}
-                >
-                  Generate Invoice
-                </button>
+
+                {!invoiceSubmitted ? (
+                  <button
+                    className="bg-orange-400 text-white text-xs px-3 py-2 rounded-full"
+                    onClick={() => navigate('/generate-invoice', { state: { course } })}
+                  >
+                    Generate Invoice
+                  </button>
+                ) : (
+                  <button
+                    className="bg-green-600 text-white text-xs px-3 py-2 rounded-full"
+                    onClick={() => handleDownloadInvoice(course)}
+                  >
+                    Download Invoice
+                  </button>
+                )}
               </div>
             </div>
           );
