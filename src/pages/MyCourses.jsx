@@ -1,10 +1,8 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { Home, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 
 const MyCourses = () => {
-  const navigate = useNavigate();
-
   const courses = [
     {
       title: "2-Day Foraging Course – Peak District",
@@ -62,26 +60,26 @@ const MyCourses = () => {
       {/* Bottom Navigation */}
       <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200">
         <nav className="flex justify-around py-2 text-xs text-gray-700">
-          <div className="flex flex-col items-center" onClick={() => navigate('/')}>
+          <NavLink to="/" className="flex flex-col items-center">
             <Home fontSize="medium" />
             <span className="text-[11px]">Home</span>
-          </div>
-          <div className="flex flex-col items-center" onClick={() => navigate('/my-courses')}>
-            <Assignment fontSize="medium" className="text-orange-500" />
+          </NavLink>
+          <NavLink to="/my-courses" className="flex flex-col items-center text-orange-500">
+            <Assignment fontSize="medium" />
             <span className="text-[11px]">My Courses</span>
-          </div>
-          <div className="flex flex-col items-center" onClick={() => navigate('/calendar')}>
+          </NavLink>
+          <NavLink to="/calendar" className="flex flex-col items-center">
             <CalendarMonth fontSize="medium" />
             <span className="text-[11px]">Calendar</span>
-          </div>
-          <div className="flex flex-col items-center" onClick={() => navigate('/handbook')}>
+          </NavLink>
+          <NavLink to="/handbook" className="flex flex-col items-center">
             <MenuBook fontSize="medium" />
             <span className="text-[11px]">Handbook</span>
-          </div>
-          <div className="flex flex-col items-center" onClick={() => navigate('/menu')}>
+          </NavLink>
+          <NavLink to="/menu" className="flex flex-col items-center">
             <Menu fontSize="medium" />
             <span className="text-[11px]">Menu</span>
-          </div>
+          </NavLink>
         </nav>
       </footer>
     </div>
