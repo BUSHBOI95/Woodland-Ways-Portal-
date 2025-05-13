@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import SplashScreen from './pages/SplashScreen';
 import SubmitReport from './pages/SubmitReport';
 import GenerateInvoice from './pages/GenerateInvoice';
+import AdminDashboard from './pages/AdminDashboard';
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/splash" element={<SplashScreen />} />
         <Route path="/submit-report" element={<SubmitReport />} />
         <Route path="/generate-invoice" element={<GenerateInvoice />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );
