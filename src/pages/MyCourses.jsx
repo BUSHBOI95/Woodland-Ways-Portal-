@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Home, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-material';
 
 const MyCourses = () => {
   const navigate = useNavigate();
-
-  const instructorInitials = 'JP';
-  const [submittedReports, setSubmittedReports] = useState(['2-Day Foraging Course']);
-  const [submittedInvoices, setSubmittedInvoices] = useState(['2-Day Foraging Course']);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -33,6 +29,35 @@ const MyCourses = () => {
       weather: "18°C, Sunny"
     }
   ];
+
+  const [submittedReports, setSubmittedReports] = useState([]);
+  const [submittedInvoices, setSubmittedInvoices] = useState([]);
+  const [remindedCourses, setRemindedCourses] = useState([]);
+
+  useEffect(() => {
+    const reports = JSON.parse(localStorage.getItem('submittedReports') || '{}');
+    const invoices = JSON.parse(localStorage.getItem('invoiceArchive') || '[]');
+
+    const reportTitles = Object.keys(reports);
+    const invoiceTitles = invoices.map(entry => entry.courseTitle);
+
+    setSubmittedReports(reportTitles);
+    setSubmittedInvoices(invoiceTitles);
+  }, []);
+
+  useEffect(() => {
+    const pastCourses = allCourses.filter(c => c.endDate < today);
+    pastCourses.forEach((course) => {
+      const alreadyReminded = remindedCourses.includes(course.title);
+      const missingReport = !submittedReports.includes(course.title);
+      const missingInvoice = !submittedInvoices.includes(course.title);
+
+      if (!alreadyReminded && (missingReport || missingInvoice)) {
+        alert(`Reminder: Submit report and invoice for "${course.title}"`);
+        setRemindedCourses(prev => [...prev, course.title]);
+      }
+    });
+  }, [submittedReports, submittedInvoices]);
 
   const upcomingCourses = allCourses.filter(c => c.endDate >= today);
   const pastCourses = allCourses.filter(c => c.endDate < today);
