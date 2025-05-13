@@ -1,12 +1,15 @@
 import React from 'react';
-import { Assignment, CalendarMonth, MenuBook, Menu, Home, PhotoCamera } from '@mui/icons-material';
+import { NavLink } from 'react-router-dom';
+import { Home, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-material';
 
 const Photos = () => {
-  const photoList = [
-    "/photos/course1.jpg",
-    "/photos/course2.jpg",
-    "/photos/team1.jpg",
-    "/photos/firecraft.jpg"
+  const images = [
+    '/Icon.png',
+    '/Icon.png',
+    '/Icon.png',
+    '/Icon.png',
+    '/Icon.png',
+    '/Icon.png'
   ];
 
   return (
@@ -15,19 +18,14 @@ const Photos = () => {
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-orange-500 text-white">
         <h1 className="text-lg font-semibold">Photos</h1>
-        <PhotoCamera fontSize="medium" />
+        <div className="text-2xl">📸</div>
       </header>
 
       {/* Photo Grid */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
-        <div className="grid grid-cols-2 gap-3">
-          {photoList.map((src, i) => (
-            <img
-              key={i}
-              src={src}
-              alt={`WWays Photo ${i + 1}`}
-              className="w-full h-32 object-cover rounded-lg shadow-sm"
-            />
+      <div className="flex-1 overflow-y-auto px-4 py-6">
+        <div className="grid grid-cols-3 gap-3">
+          {images.map((src, i) => (
+            <img key={i} src={src} alt={`Gallery ${i}`} className="rounded-lg border object-cover" />
           ))}
         </div>
       </div>
@@ -35,26 +33,26 @@ const Photos = () => {
       {/* Bottom Navigation */}
       <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200">
         <nav className="flex justify-around py-2 text-xs text-gray-700">
-          <div className="flex flex-col items-center">
+          <NavLink to="/" className="flex flex-col items-center">
             <Home fontSize="medium" />
             <span className="text-[11px]">Home</span>
-          </div>
-          <div className="flex flex-col items-center">
+          </NavLink>
+          <NavLink to="/my-courses" className="flex flex-col items-center">
             <Assignment fontSize="medium" />
             <span className="text-[11px]">My Courses</span>
-          </div>
-          <div className="flex flex-col items-center">
+          </NavLink>
+          <NavLink to="/calendar" className="flex flex-col items-center">
             <CalendarMonth fontSize="medium" />
             <span className="text-[11px]">Calendar</span>
-          </div>
-          <div className="flex flex-col items-center">
+          </NavLink>
+          <NavLink to="/handbook" className="flex flex-col items-center">
             <MenuBook fontSize="medium" />
             <span className="text-[11px]">Handbook</span>
-          </div>
-          <div className="flex flex-col items-center">
+          </NavLink>
+          <NavLink to="/menu" className="flex flex-col items-center text-orange-500">
             <Menu fontSize="medium" />
             <span className="text-[11px]">Menu</span>
-          </div>
+          </NavLink>
         </nav>
       </footer>
     </div>
