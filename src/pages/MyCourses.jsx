@@ -42,36 +42,55 @@ const MyCourses = () => {
     const invoiceSubmitted = submittedInvoices.includes(course.title);
 
     return (
-      <div key={course.id} className="bg-gray-100 p-4 rounded-xl shadow-sm">
+      <div
+        key={course.id}
+        className={`bg-gray-100 p-4 rounded-xl shadow-sm ${isPast ? 'cursor-pointer hover:bg-gray-200' : ''}`}
+        onClick={() => {
+          if (isPast) {
+            navigate('/course-details', { state: { course } });
+          }
+        }}
+      >
         <h2 className="font-semibold text-gray-800 text-sm mb-1">{course.title}</h2>
         <p className="text-xs text-gray-600 mb-1">{course.startDate} – {course.location}</p>
         <p className="text-xs text-gray-700 mb-1">Weather: {course.weather}</p>
         <p className="text-xs text-gray-700 mb-1">Risk Rating: {course.risk}</p>
 
-        <div className="flex flex-col gap-2 mt-2">
-          <button
-            className="bg-orange-500 text-white text-xs px-3 py-2 rounded-full"
-            onClick={() => navigate('/submit-report', { state: { course } })}
-          >
-            {reportSubmitted ? "View/Edit Report" : "Submit Report"}
-          </button>
+        {!isPast && (
+          <div className="flex flex-col gap-2 mt-2">
+            <button
+              className="bg-orange-500 text-white text-xs px-3 py-2 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/submit-report', { state: { course } });
+              }}
+            >
+              {reportSubmitted ? "View/Edit Report" : "Submit Report"}
+            </button>
 
-          {!invoiceSubmitted ? (
-            <button
-              className="bg-orange-400 text-white text-xs px-3 py-2 rounded-full"
-              onClick={() => navigate('/generate-invoice', { state: { course } })}
-            >
-              Generate Invoice
-            </button>
-          ) : (
-            <button
-              className="bg-green-600 text-white text-xs px-3 py-2 rounded-full"
-              onClick={() => navigate('/generate-invoice', { state: { course, readonly: true } })}
-            >
-              Download Invoice
-            </button>
-          )}
-        </div>
+            {!invoiceSubmitted ? (
+              <button
+                className="bg-orange-400 text-white text-xs px-3 py-2 rounded-full"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/generate-invoice', { state: { course } });
+                }}
+              >
+                Generate Invoice
+              </button>
+            ) : (
+              <button
+                className="bg-green-600 text-white text-xs px-3 py-2 rounded-full"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/generate-invoice', { state: { course, readonly: true } });
+                }}
+              >
+                Download Invoice
+              </button>
+            )}
+          </div>
+        )}
       </div>
     );
   };
