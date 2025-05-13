@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation, Link } from 'react-router-dom';
 import { Home, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-material';
 
 const MyCourses = () => {
@@ -37,8 +37,17 @@ const MyCourses = () => {
         <div className="text-2xl">🗂️</div>
       </header>
 
+      {/* "My Reports" Button */}
+      <div className="px-4 py-3">
+        <Link to="/report-archive">
+          <button className="bg-orange-400 text-white px-4 py-2 rounded-full w-full font-medium text-sm">
+            My Reports
+          </button>
+        </Link>
+      </div>
+
       {/* Course List */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 pb-20 space-y-4">
         {courses.map((course) => {
           const isSubmitted = reportSubmittedFor === course.title;
 
@@ -53,7 +62,7 @@ const MyCourses = () => {
                   className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full"
                   onClick={() => navigate('/submit-report', { state: { course } })}
                 >
-                  {isSubmitted ? "View Report" : "Submit Report"}
+                  {isSubmitted ? "View/Edit Report" : "Submit Report"}
                 </button>
                 <button
                   className={`text-xs px-3 py-1 rounded-full ${
