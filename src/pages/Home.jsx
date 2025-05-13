@@ -11,12 +11,12 @@ const HomePage = () => {
       </header>
 
       {/* Logo */}
-      <div className="mt-4 flex justify-center">
-        <img src="/Icon.png" alt="Woodland Ways Logo" className="w-40 h-auto" />
+      <div className="mt-6 flex justify-center">
+        <img src="/Icon.png" alt="Woodland Ways Logo" className="w-56 h-auto mb-4" />
       </div>
 
       {/* Post Input */}
-      <div className="px-4 mt-6">
+      <div className="px-4">
         <input
           type="text"
           placeholder="What's on your mind?"
@@ -24,8 +24,8 @@ const HomePage = () => {
         />
       </div>
 
-      {/* Buttons (horizontal layout) */}
-      <div className="flex justify-around gap-2 px-4 mt-4">
+      {/* Buttons - more rounded and evenly spaced */}
+      <div className="flex justify-around gap-3 px-4 mt-4">
         <button className="bg-orange-400 text-white px-4 py-2 rounded-full text-sm flex-1">Photos</button>
         <button className="bg-orange-400 text-white px-4 py-2 rounded-full text-sm flex-1">Events</button>
         <button className="bg-orange-400 text-white px-4 py-2 rounded-full text-sm flex-1">Directory</button>
