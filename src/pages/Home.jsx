@@ -6,9 +6,8 @@ const HomePage = () => {
     <div className="max-w-md mx-auto bg-white min-h-screen shadow-sm flex flex-col justify-between">
 
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-orange-500 text-white">
+      <header className="flex items-center justify-center px-4 py-3 bg-orange-500 text-white">
         <h1 className="text-lg font-semibold">Staff Portal</h1>
-        <div className="text-2xl">🦌</div>
       </header>
 
       {/* Logo */}
@@ -25,11 +24,11 @@ const HomePage = () => {
         />
       </div>
 
-      {/* Buttons */}
-      <div className="px-4 mt-4 space-y-2">
-        <button className="w-full bg-orange-400 text-white px-4 py-2 rounded-full text-sm">Photos</button>
-        <button className="w-full bg-orange-400 text-white px-4 py-2 rounded-full text-sm">Events</button>
-        <button className="w-full bg-orange-400 text-white px-4 py-2 rounded-full text-sm">Directory</button>
+      {/* Buttons (horizontal layout) */}
+      <div className="flex justify-around gap-2 px-4 mt-4">
+        <button className="bg-orange-400 text-white px-4 py-2 rounded-full text-sm flex-1">Photos</button>
+        <button className="bg-orange-400 text-white px-4 py-2 rounded-full text-sm flex-1">Events</button>
+        <button className="bg-orange-400 text-white px-4 py-2 rounded-full text-sm flex-1">Directory</button>
       </div>
 
       {/* Feed */}
