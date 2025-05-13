@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { addReport } from '../data/reportStore';
 
 const SubmitReport = () => {
   const location = useLocation();
@@ -14,8 +15,17 @@ const SubmitReport = () => {
   });
 
   const handleSubmit = () => {
-    // Mock submission logic (later connect to backend)
-    alert('Report submitted!');
+    if (!report.attendance || !report.notes || !report.kitUsed) {
+      alert("Please complete all fields before submitting.");
+      return;
+    }
+
+    addReport({
+      course,
+      report,
+      submittedAt: new Date().toISOString()
+    });
+
     navigate('/my-courses', { state: { reportSubmittedFor: course.title } });
   };
 
