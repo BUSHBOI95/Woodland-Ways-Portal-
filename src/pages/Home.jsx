@@ -1,129 +1,123 @@
 import React, { useState, useEffect } from 'react';
-import { FaThumbsUp, FaComment, FaPaperPlane, FaHome, FaBook, FaCalendarAlt, FaBars, FaClipboardList } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
+import { FaThumbsUp, FaCommentAlt, FaPaperPlane } from 'react-icons/fa';
+import WWLogo from '../../assets/Logo.png';
 
 const Home = () => {
   const [postText, setPostText] = useState('');
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const savedPosts = localStorage.getItem('posts');
+    const savedPosts = localStorage.getItem('staffPosts');
     if (savedPosts) {
       setPosts(JSON.parse(savedPosts));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('posts', JSON.stringify(posts));
+    localStorage.setItem('staffPosts', JSON.stringify(posts));
   }, [posts]);
 
   const handlePost = () => {
     if (postText.trim()) {
       const newPost = {
         id: Date.now(),
-        user: 'Woodland Ways',
-        avatar: '/Icon.png',
-        content: postText,
+        text: postText,
         timestamp: new Date().toISOString(),
-        likes: 0,
-        comments: [],
+        likes: 0
       };
       setPosts([newPost, ...posts]);
       setPostText('');
     }
   };
 
-  const formatTimestamp = (isoString) => {
-    const date = new Date(isoString);
-    return date.toLocaleString('en-GB');
-  };
-
-  const handleLike = (id) => {
-    setPosts(posts.map(post => post.id === id ? { ...post, likes: post.likes + 1 } : post));
-  };
-
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-between">
+    <div className="max-w-md mx-auto bg-white min-h-screen shadow-sm flex flex-col justify-between">
       {/* Header */}
-      <div className="bg-orange-500 py-3 text-white text-center text-xl font-bold">
-        Staff Portal
-      </div>
+      <header className="flex items-center justify-center px-4 py-3 bg-orange-500 text-white relative">
+        <h1 className="text-xl font-bold">Staff Portal</h1>
+      </header>
 
-      {/* Logo */}
-      <div className="flex flex-col items-center mt-4">
-        <img src="/Icon.png" alt="Logo" className="w-24 h-24 object-contain mb-2" />
-        <h1 className="text-xl font-semibold text-gray-800">Woodland Ways</h1>
-      </div>
+      {/* Feed Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {/* Logo */}
+        <div className="flex justify-center my-2">
+          <img src={WWLogo} alt="Woodland Ways Logo" className="h-24 w-auto" />
+        </div>
 
-      {/* Post input */}
-      <div className="bg-gray-50 mx-4 mt-4 p-4 rounded-lg shadow">
-        <textarea
-          placeholder="Share an update..."
-          className="w-full p-2 border border-gray-300 rounded resize-none focus:outline-none"
-          value={postText}
-          onChange={(e) => setPostText(e.target.value)}
-          rows={3}
-        />
-        <div className="flex justify-end mt-2">
+        {/* Post Box */}
+        <div className="bg-gray-100 p-3 rounded-xl shadow-sm">
+          <textarea
+            value={postText}
+            onChange={(e) => setPostText(e.target.value)}
+            placeholder="Share an update with the team..."
+            className="w-full p-2 rounded border resize-none text-sm"
+          />
           <button
             onClick={handlePost}
-            className="bg-orange-500 text-white px-4 py-2 rounded-full"
+            className="bg-orange-500 text-white px-4 py-1 mt-2 rounded-full float-right text-xs"
           >
             Post
           </button>
         </div>
-      </div>
 
-      {/* Posts feed */}
-      <div className="mt-4 px-4 flex-1 overflow-y-auto">
+        {/* Posts */}
         {posts.map((post) => (
-          <div key={post.id} className="bg-gray-100 p-4 mb-4 rounded-lg shadow">
-            <div className="flex items-center mb-2">
-              <img src={post.avatar} alt="avatar" className="w-10 h-10 rounded-full mr-3" />
+          <div
+            key={post.id}
+            className="bg-gray-50 border border-gray-200 rounded-lg p-3 space-y-1 shadow-sm"
+          >
+            <div className="flex items-center gap-2">
+              <img
+                src={WWLogo}
+                alt="avatar"
+                className="w-10 h-10 rounded-full object-cover"
+              />
               <div>
-                <div className="font-semibold text-sm">{post.user}</div>
-                <div className="text-xs text-gray-500">{formatTimestamp(post.timestamp)}</div>
+                <p className="text-sm font-semibold">Woodland Ways</p>
+                <p className="text-[11px] text-gray-500">
+                  {new Date(post.timestamp).toLocaleString()}
+                </p>
               </div>
             </div>
-            <p className="mb-3 text-sm">{post.content}</p>
-            <div className="flex justify-around text-gray-600 text-sm">
-              <button onClick={() => handleLike(post.id)} className="flex items-center gap-1">
-                <FaThumbsUp /> Like ({post.likes})
-              </button>
-              <button className="flex items-center gap-1">
-                <FaComment /> Comment
-              </button>
-              <button className="flex items-center gap-1">
-                <FaPaperPlane /> Send
-              </button>
+            <p className="text-sm text-gray-800 mt-2">{post.text}</p>
+
+            {/* Icons */}
+            <div className="flex justify-around text-gray-500 mt-2 pt-2 border-t text-xs">
+              <div className="flex items-center gap-1 cursor-pointer">
+                <FaThumbsUp className="text-sm" />
+                <span>Like</span>
+              </div>
+              <div className="flex items-center gap-1 cursor-pointer">
+                <FaCommentAlt className="text-sm" />
+                <span>Comment</span>
+              </div>
+              <div className="flex items-center gap-1 cursor-pointer">
+                <FaPaperPlane className="text-sm" />
+                <span>Send</span>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="flex justify-around bg-white border-t border-gray-200 p-2">
-        <NavLink to="/" className="flex flex-col items-center text-orange-500">
-          <FaHome size={20} />
-          <span className="text-xs">Home</span>
-        </NavLink>
-        <NavLink to="/mycourses" className="flex flex-col items-center text-gray-500">
-          <FaClipboardList size={20} />
-          <span className="text-xs">My Courses</span>
-        </NavLink>
-        <NavLink to="/calendar" className="flex flex-col items-center text-gray-500">
-          <FaCalendarAlt size={20} />
-          <span className="text-xs">Calendar</span>
-        </NavLink>
-        <NavLink to="/handbook" className="flex flex-col items-center text-gray-500">
-          <FaBook size={20} />
-          <span className="text-xs">Handbook</span>
-        </NavLink>
-        <NavLink to="/menu" className="flex flex-col items-center text-gray-500">
-          <FaBars size={20} />
-          <span className="text-xs">Menu</span>
-        </NavLink>
-      </div>
+      {/* Bottom Nav */}
+      <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200">
+        <nav className="flex justify-around py-2 text-xs text-gray-700">
+          <NavLink to="/" className="flex flex-col items-center text-orange-500">
+            <FaThumbsUp className="text-lg" />
+            <span className="text-[11px]">Home</span>
+          </NavLink>
+          <NavLink to="/my-courses" className="flex flex-col items-center">
+            <FaCommentAlt className="text-lg" />
+            <span className="text-[11px]">Courses</span>
+          </NavLink>
+          <NavLink to="/calendar" className="flex flex-col items-center">
+            <FaPaperPlane className="text-lg" />
+            <span className="text-[11px]">Calendar</span>
+          </NavLink>
+        </nav>
+      </footer>
     </div>
   );
 };
