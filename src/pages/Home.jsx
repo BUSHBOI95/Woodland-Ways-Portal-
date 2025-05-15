@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment";
 import Icon from "../../Icon.png";
 import { NavLink } from "react-router-dom";
 import {
@@ -36,21 +35,12 @@ const Home = () => {
       const newPost = {
         id: Date.now(),
         text: postText,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toLocaleString(),
       };
       const updatedPosts = [newPost, ...posts];
       setPosts(updatedPosts);
       setPostText("");
     }
-  };
-
-  const formatTimestamp = (timestamp) => {
-    return moment(timestamp).calendar(null, {
-      sameDay: "[Today at] h:mm A",
-      lastDay: "[Yesterday at] h:mm A",
-      lastWeek: "dddd [at] h:mm A",
-      sameElse: "MMM D [at] h:mm A",
-    });
   };
 
   return (
@@ -114,9 +104,7 @@ const Home = () => {
                 />
                 <div>
                   <p className="font-semibold text-sm">Woodland Ways</p>
-                  <p className="text-xs text-gray-500">
-                    Instructor • {formatTimestamp(post.timestamp)}
-                  </p>
+                  <p className="text-xs text-gray-500">Instructor • {post.timestamp}</p>
                 </div>
               </div>
               <p className="text-sm text-gray-800 mb-2">{post.text}</p>
