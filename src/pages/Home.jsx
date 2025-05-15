@@ -96,12 +96,15 @@ const Home = () => {
         {/* Posts */}
         <div className="space-y-4">
           {posts.map((post) => (
-            <div key={post.id} className="bg-white border rounded-lg p-3 shadow-sm">
+            <div
+              key={post.id}
+              className="bg-white border rounded-lg p-3 shadow-sm"
+            >
               <div className="flex items-center mb-2">
                 <img
                   src={Icon}
                   alt="Avatar"
-                  className="w-10 h-10 rounded-full mr-3"
+                  className="w-10 h-10 rounded-full mr-3 object-cover"
                 />
                 <div>
                   <p className="font-semibold text-sm">Woodland Ways</p>
