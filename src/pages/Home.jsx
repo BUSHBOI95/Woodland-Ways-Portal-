@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import moment from "moment";
 import Icon from "../../Icon.png";
-import { NavLink } from "react-router-dom";
 import {
   Home as HomeIcon,
   Assignment,
@@ -13,19 +13,20 @@ import {
   Send,
   ThumbUp,
   ChatBubble,
+  Reply,
 } from "@mui/icons-material";
-import moment from "moment";
+import { NavLink } from "react-router-dom";
 
 const Home = () => {
   const [postText, setPostText] = useState("");
   const [posts, setPosts] = useState([]);
-  const [commentInputs, setCommentInputs] = useState({});
+  const [commentText, setCommentText] = useState({});
+  const [likedPosts, setLikedPosts] = useState({});
+  const [likedComments, setLikedComments] = useState({});
 
   useEffect(() => {
     const savedPosts = localStorage.getItem("posts");
-    if (savedPosts) {
-      setPosts(JSON.parse(savedPosts));
-    }
+    if (savedPosts) setPosts(JSON.parse(savedPosts));
   }, []);
 
   useEffect(() => {
@@ -33,62 +34,72 @@ const Home = () => {
   }, [posts]);
 
   const handlePost = () => {
-    if (postText.trim()) {
-      const newPost = {
-        id: Date.now(),
-        text: postText,
-        timestamp: new Date(),
-        likes: 0,
-        comments: [],
-      };
-      setPosts([newPost, ...posts]);
-      setPostText("");
-    }
-  };
-
-  const handleLike = (postId) => {
-    const updatedPosts = posts.map((post) =>
-      post.id === postId ? { ...post, likes: post.likes + 1 } : post
-    );
-    setPosts(updatedPosts);
-  };
-
-  const handleCommentChange = (postId, value) => {
-    setCommentInputs({ ...commentInputs, [postId]: value });
-  };
-
-  const handleCommentSubmit = (postId) => {
-    const commentText = commentInputs[postId]?.trim();
-    if (!commentText) return;
-
-    const newComment = {
+    if (!postText.trim()) return;
+    const newPost = {
       id: Date.now(),
-      text: commentText,
-      timestamp: new Date(),
+      text: postText,
+      timestamp: new Date().toISOString(),
+      comments: [],
       likes: 0,
     };
+    setPosts([newPost, ...posts]);
+    setPostText("");
+  };
 
+  const handleComment = (postId) => {
+    if (!commentText[postId]?.trim()) return;
+    const newComment = {
+      id: Date.now(),
+      text: commentText[postId],
+      timestamp: new Date().toISOString(),
+      likes: 0,
+    };
     const updatedPosts = posts.map((post) =>
       post.id === postId
         ? { ...post, comments: [...post.comments, newComment] }
         : post
     );
-
     setPosts(updatedPosts);
-    setCommentInputs({ ...commentInputs, [postId]: "" });
+    setCommentText({ ...commentText, [postId]: "" });
   };
 
-  const handleCommentLike = (postId, commentId) => {
-    const updatedPosts = posts.map((post) => {
-      if (post.id !== postId) return post;
-      const updatedComments = post.comments.map((comment) =>
-        comment.id === commentId
-          ? { ...comment, likes: comment.likes + 1 }
-          : comment
+  const toggleLikePost = (postId) => {
+    setLikedPosts((prev) => {
+      const updated = { ...prev, [postId]: !prev[postId] };
+      const updatedPosts = posts.map((post) =>
+        post.id === postId
+          ? { ...post, likes: post.likes + (updated[postId] ? 1 : -1) }
+          : post
       );
-      return { ...post, comments: updatedComments };
+      setPosts(updatedPosts);
+      return updated;
     });
-    setPosts(updatedPosts);
+  };
+
+  const toggleLikeComment = (postId, commentId) => {
+    setLikedComments((prev) => {
+      const updated = {
+        ...prev,
+        [commentId]: !prev[commentId],
+      };
+      const updatedPosts = posts.map((post) =>
+        post.id === postId
+          ? {
+              ...post,
+              comments: post.comments.map((comment) =>
+                comment.id === commentId
+                  ? {
+                      ...comment,
+                      likes: comment.likes + (updated[commentId] ? 1 : -1),
+                    }
+                  : comment
+              ),
+            }
+          : post
+      );
+      setPosts(updatedPosts);
+      return updated;
+    });
   };
 
   return (
@@ -99,11 +110,7 @@ const Home = () => {
 
       <div className="flex-1 overflow-y-auto px-4 pb-24">
         <div className="flex justify-center py-3">
-          <img
-            src={Icon}
-            alt="Woodland Ways Logo"
-            className="h-24 w-auto object-contain"
-          />
+          <img src={Icon} alt="Woodland Ways Logo" className="h-24 w-auto" />
         </div>
 
         <div className="bg-gray-100 rounded-xl p-3 mb-4">
@@ -152,8 +159,8 @@ const Home = () => {
               <p className="text-sm text-gray-800 mb-2">{post.text}</p>
               <div className="flex justify-around text-gray-500 text-xs border-t pt-2">
                 <button
-                  onClick={() => handleLike(post.id)}
                   className="flex items-center gap-1"
+                  onClick={() => toggleLikePost(post.id)}
                 >
                   <ThumbUp fontSize="small" />
                   <span>Like ({post.likes})</span>
@@ -167,38 +174,45 @@ const Home = () => {
                   <span>Send</span>
                 </div>
               </div>
-              <div className="mt-2 flex items-center gap-2 px-2">
-                <input
-                  type="text"
-                  placeholder="Write a comment..."
-                  className="flex-1 text-sm px-3 py-1 border rounded-full"
-                  value={commentInputs[post.id] || ""}
-                  onChange={(e) => handleCommentChange(post.id, e.target.value)}
-                />
-                <button onClick={() => handleCommentSubmit(post.id)}>
-                  <Send fontSize="small" className="text-orange-500" />
-                </button>
-              </div>
-              <div className="mt-2 space-y-2">
+
+              <div className="mt-3">
                 {post.comments.map((comment) => (
-                  <div key={comment.id} className="ml-4 flex items-start gap-2">
-                    <img src={Icon} alt="Avatar" className="w-6 h-6 rounded-full mt-1" />
-                    <div>
-                      <p className="font-semibold text-xs">Woodland Ways</p>
-                      <p className="text-xs text-gray-500">
-                        {moment(comment.timestamp).fromNow()}
-                      </p>
-                      <p className="text-sm">{comment.text}</p>
-                      <button
-                        onClick={() => handleCommentLike(post.id, comment.id)}
-                        className="text-xs text-gray-500 flex items-center gap-1 mt-1"
-                      >
-                        <ThumbUp fontSize="small" />
-                        <span>Like ({comment.likes})</span>
+                  <div key={comment.id} className="mb-2 ml-2">
+                    <div className="flex items-center mb-1">
+                      <img src={Icon} alt="Avatar" className="w-6 h-6 rounded-full mr-2" />
+                      <div>
+                        <p className="text-xs font-semibold">Woodland Ways</p>
+                        <p className="text-xs text-gray-400">
+                          {moment(comment.timestamp).fromNow()}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-700 ml-8">{comment.text}</p>
+                    <div className="ml-8 text-xs text-gray-500 flex items-center gap-3 mt-1">
+                      <button onClick={() => toggleLikeComment(post.id, comment.id)}>
+                        <ThumbUp fontSize="inherit" /> Like ({comment.likes})
+                      </button>
+                      <button>
+                        <Reply fontSize="inherit" /> Reply
                       </button>
                     </div>
                   </div>
                 ))}
+
+                <div className="flex items-center mt-2 border rounded-full px-3 py-1">
+                  <input
+                    type="text"
+                    placeholder="Write a comment..."
+                    value={commentText[post.id] || ""}
+                    onChange={(e) =>
+                      setCommentText({ ...commentText, [post.id]: e.target.value })
+                    }
+                    className="flex-1 outline-none text-sm"
+                  />
+                  <button onClick={() => handleComment(post.id)}>
+                    <Send className="text-orange-500 ml-2" fontSize="small" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
