@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment";
 import Icon from "../../Icon.png";
+import { NavLink } from "react-router-dom";
 import {
   Home as HomeIcon,
   Assignment,
@@ -15,18 +15,17 @@ import {
   ChatBubble,
   Reply,
 } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
+import moment from "moment";
 
 const Home = () => {
   const [postText, setPostText] = useState("");
   const [posts, setPosts] = useState([]);
-  const [commentText, setCommentText] = useState({});
-  const [likedPosts, setLikedPosts] = useState({});
-  const [likedComments, setLikedComments] = useState({});
 
   useEffect(() => {
     const savedPosts = localStorage.getItem("posts");
-    if (savedPosts) setPosts(JSON.parse(savedPosts));
+    if (savedPosts) {
+      setPosts(JSON.parse(savedPosts));
+    }
   }, []);
 
   useEffect(() => {
@@ -34,72 +33,65 @@ const Home = () => {
   }, [posts]);
 
   const handlePost = () => {
-    if (!postText.trim()) return;
-    const newPost = {
-      id: Date.now(),
-      text: postText,
-      timestamp: new Date().toISOString(),
-      comments: [],
-      likes: 0,
-    };
-    setPosts([newPost, ...posts]);
-    setPostText("");
-  };
-
-  const handleComment = (postId) => {
-    if (!commentText[postId]?.trim()) return;
-    const newComment = {
-      id: Date.now(),
-      text: commentText[postId],
-      timestamp: new Date().toISOString(),
-      likes: 0,
-    };
-    const updatedPosts = posts.map((post) =>
-      post.id === postId
-        ? { ...post, comments: [...post.comments, newComment] }
-        : post
-    );
-    setPosts(updatedPosts);
-    setCommentText({ ...commentText, [postId]: "" });
-  };
-
-  const toggleLikePost = (postId) => {
-    setLikedPosts((prev) => {
-      const updated = { ...prev, [postId]: !prev[postId] };
-      const updatedPosts = posts.map((post) =>
-        post.id === postId
-          ? { ...post, likes: post.likes + (updated[postId] ? 1 : -1) }
-          : post
-      );
-      setPosts(updatedPosts);
-      return updated;
-    });
-  };
-
-  const toggleLikeComment = (postId, commentId) => {
-    setLikedComments((prev) => {
-      const updated = {
-        ...prev,
-        [commentId]: !prev[commentId],
+    if (postText.trim()) {
+      const newPost = {
+        id: Date.now(),
+        text: postText,
+        timestamp: new Date(),
+        likes: 0,
+        comments: [],
       };
+      setPosts([newPost, ...posts]);
+      setPostText("");
+    }
+  };
+
+  const toggleLike = (postId) => {
+    setPosts(
+      posts.map((post) =>
+        post.id === postId
+          ? { ...post, likes: post.likes + 1 }
+          : post
+      )
+    );
+  };
+
+  const handleCommentSubmit = (postId, commentText, setCommentText) => {
+    if (commentText.trim()) {
       const updatedPosts = posts.map((post) =>
         post.id === postId
           ? {
               ...post,
-              comments: post.comments.map((comment) =>
-                comment.id === commentId
-                  ? {
-                      ...comment,
-                      likes: comment.likes + (updated[commentId] ? 1 : -1),
-                    }
-                  : comment
-              ),
+              comments: [
+                ...post.comments,
+                {
+                  id: Date.now(),
+                  text: commentText,
+                  timestamp: new Date(),
+                  likes: 0,
+                },
+              ],
             }
           : post
       );
       setPosts(updatedPosts);
-      return updated;
-    });
+      setCommentText("");
+    }
+  };
+
+  const toggleCommentLike = (postId, commentId) => {
+    setPosts(
+      posts.map((post) =>
+        post.id === postId
+          ? {
+              ...post,
+              comments: post.comments.map((c) =>
+                c.id === commentId ? { ...c, likes: c.likes + 1 } : c
+              ),
+            }
+          : post
+      )
+    );
   };
 
   return (
@@ -110,7 +102,11 @@ const Home = () => {
 
       <div className="flex-1 overflow-y-auto px-4 pb-24">
         <div className="flex justify-center py-3">
-          <img src={Icon} alt="Woodland Ways Logo" className="h-24 w-auto" />
+          <img
+            src={Icon}
+            alt="Woodland Ways Logo"
+            className="h-24 w-auto object-contain"
+          />
         </div>
 
         <div className="bg-gray-100 rounded-xl p-3 mb-4">
@@ -123,99 +119,119 @@ const Home = () => {
           />
           <button
             onClick={handlePost}
-            className="bg-orange-500 text-white px-4 py-2 mt-2 rounded-full text-sm float-right"
+            className="bg-orange-500 text-white px-4 py-2 mt-2 rounded-full text-sm float-right shadow-md hover:bg-orange-600"
           >
             Post
           </button>
         </div>
 
         <div className="grid grid-cols-3 gap-2 mb-4 text-center text-sm">
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center text-gray-600">
             <Photo fontSize="small" />
             <span>Photos</span>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center text-gray-600">
             <Event fontSize="small" />
             <span>Events</span>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center text-gray-600">
             <Group fontSize="small" />
             <span>Directory</span>
           </div>
         </div>
 
         <div className="space-y-4">
-          {posts.map((post) => (
-            <div key={post.id} className="bg-white border rounded-lg p-3 shadow-sm">
-              <div className="flex items-center mb-2">
-                <img src={Icon} alt="Avatar" className="w-10 h-10 rounded-full mr-3" />
-                <div>
-                  <p className="font-semibold text-sm">Woodland Ways</p>
-                  <p className="text-xs text-gray-500">
-                    Instructor • {moment(post.timestamp).fromNow()}
-                  </p>
+          {posts.map((post) => {
+            const [commentText, setCommentText] = useState("");
+            return (
+              <div key={post.id} className="bg-white border rounded-lg p-3 shadow-md">
+                <div className="flex items-center mb-2">
+                  <img
+                    src={Icon}
+                    alt="Avatar"
+                    className="w-10 h-10 rounded-full mr-3"
+                  />
+                  <div>
+                    <p className="font-semibold text-sm">Woodland Ways</p>
+                    <p className="text-xs text-gray-500">
+                      Instructor • {moment(post.timestamp).fromNow()}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <p className="text-sm text-gray-800 mb-2">{post.text}</p>
-              <div className="flex justify-around text-gray-500 text-xs border-t pt-2">
-                <button
-                  className="flex items-center gap-1"
-                  onClick={() => toggleLikePost(post.id)}
-                >
-                  <ThumbUp fontSize="small" />
-                  <span>Like ({post.likes})</span>
-                </button>
-                <div className="flex items-center gap-1">
-                  <ChatBubble fontSize="small" />
-                  <span>Comment</span>
+                <p className="text-sm text-gray-800 mb-2">{post.text}</p>
+                <div className="flex justify-around text-gray-500 text-xs border-t pt-2">
+                  <button
+                    onClick={() => toggleLike(post.id)}
+                    className="flex items-center gap-1 hover:text-orange-500"
+                  >
+                    <ThumbUp fontSize="small" />
+                    <span>Like ({post.likes})</span>
+                  </button>
+                  <div className="flex items-center gap-1">
+                    <ChatBubble fontSize="small" />
+                    <span>Comment</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Send fontSize="small" />
+                    <span>Send</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Send fontSize="small" />
-                  <span>Send</span>
-                </div>
-              </div>
 
-              <div className="mt-3">
-                {post.comments.map((comment) => (
-                  <div key={comment.id} className="mb-2 ml-2">
-                    <div className="flex items-center mb-1">
-                      <img src={Icon} alt="Avatar" className="w-6 h-6 rounded-full mr-2" />
-                      <div>
-                        <p className="text-xs font-semibold">Woodland Ways</p>
-                        <p className="text-xs text-gray-400">
-                          {moment(comment.timestamp).fromNow()}
+                <div className="mt-2 space-y-1">
+                  {post.comments.map((c) => (
+                    <div key={c.id} className="flex items-start gap-2 text-sm">
+                      <img
+                        src={Icon}
+                        alt="Avatar"
+                        className="w-8 h-8 rounded-full mt-1"
+                      />
+                      <div className="bg-gray-100 rounded-xl px-3 py-2 w-full">
+                        <p className="font-semibold text-xs mb-1">
+                          Woodland Ways
                         </p>
+                        <p className="text-sm">{c.text}</p>
+                        <div className="flex items-center gap-4 mt-1 text-xs text-gray-500">
+                          <span>{moment(c.timestamp).fromNow()}</span>
+                          <button
+                            onClick={() => toggleCommentLike(post.id, c.id)}
+                            className="hover:text-orange-500"
+                          >
+                            Like ({c.likes})
+                          </button>
+                          <button className="hover:text-orange-500">
+                            <Reply fontSize="inherit" className="inline-block" /> Reply
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-700 ml-8">{comment.text}</p>
-                    <div className="ml-8 text-xs text-gray-500 flex items-center gap-3 mt-1">
-                      <button onClick={() => toggleLikeComment(post.id, comment.id)}>
-                        <ThumbUp fontSize="inherit" /> Like ({comment.likes})
-                      </button>
-                      <button>
-                        <Reply fontSize="inherit" /> Reply
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                  ))}
 
-                <div className="flex items-center mt-2 border rounded-full px-3 py-1">
-                  <input
-                    type="text"
-                    placeholder="Write a comment..."
-                    value={commentText[post.id] || ""}
-                    onChange={(e) =>
-                      setCommentText({ ...commentText, [post.id]: e.target.value })
-                    }
-                    className="flex-1 outline-none text-sm"
-                  />
-                  <button onClick={() => handleComment(post.id)}>
-                    <Send className="text-orange-500 ml-2" fontSize="small" />
-                  </button>
+                  <div className="flex items-center mt-2 gap-2">
+                    <img
+                      src={Icon}
+                      alt="Avatar"
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <input
+                      type="text"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      placeholder="Write a comment..."
+                      className="flex-1 border border-gray-300 rounded-full px-3 py-1 text-sm"
+                    />
+                    <button
+                      onClick={() =>
+                        handleCommentSubmit(post.id, commentText, setCommentText)
+                      }
+                      className="text-orange-500 hover:text-orange-600"
+                    >
+                      <Send fontSize="small" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
