@@ -19,6 +19,8 @@ import {
 const Home = () => {
   const [postText, setPostText] = useState("");
   const [posts, setPosts] = useState([]);
+  const [commentText, setCommentText] = useState({});
+  const [showComments, setShowComments] = useState({});
 
   useEffect(() => {
     const savedPosts = localStorage.getItem("posts");
@@ -37,9 +39,7 @@ const Home = () => {
         id: Date.now(),
         text: postText,
         timestamp: new Date().toISOString(),
-        liked: false,
-        showComment: false,
-        commentText: "",
+        comments: [],
       };
       const updatedPosts = [newPost, ...posts];
       setPosts(updatedPosts);
@@ -47,29 +47,35 @@ const Home = () => {
     }
   };
 
-  const toggleLike = (id) => {
-    const updatedPosts = posts.map((post) =>
-      post.id === id ? { ...post, liked: !post.liked } : post
-    );
-    setPosts(updatedPosts);
+  const handleComment = (postId) => {
+    if (commentText[postId]?.trim()) {
+      const updatedPosts = posts.map((post) =>
+        post.id === postId
+          ? {
+              ...post,
+              comments: [
+                ...(post.comments || []),
+                {
+                  id: Date.now(),
+                  text: commentText[postId],
+                  timestamp: new Date().toISOString(),
+                },
+              ],
+            }
+          : post
+      );
+      setPosts(updatedPosts);
+      setCommentText({ ...commentText, [postId]: "" });
+    }
   };
 
-  const toggleComment = (id) => {
-    const updatedPosts = posts.map((post) =>
-      post.id === id ? { ...post, showComment: !post.showComment } : post
-    );
-    setPosts(updatedPosts);
-  };
-
-  const handleCommentChange = (id, value) => {
-    const updatedPosts = posts.map((post) =>
-      post.id === id ? { ...post, commentText: value } : post
-    );
-    setPosts(updatedPosts);
+  const toggleComments = (postId) => {
+    setShowComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
   };
 
   return (
     <div className="max-w-md mx-auto bg-white min-h-screen shadow-sm flex flex-col justify-between">
+      {/* Header */}
       <header className="bg-orange-500 text-white px-4 py-3 flex justify-center items-center">
         <h1 className="text-xl font-bold">Staff Portal</h1>
       </header>
@@ -83,6 +89,7 @@ const Home = () => {
           />
         </div>
 
+        {/* Post input */}
         <div className="bg-gray-100 rounded-xl p-3 mb-4">
           <textarea
             className="w-full border border-gray-300 rounded-md p-2 text-sm resize-none"
@@ -99,6 +106,7 @@ const Home = () => {
           </button>
         </div>
 
+        {/* Action buttons */}
         <div className="grid grid-cols-3 gap-2 mb-4 text-center text-sm">
           <div className="flex flex-col items-center">
             <Photo fontSize="small" />
@@ -114,17 +122,15 @@ const Home = () => {
           </div>
         </div>
 
+        {/* Posts */}
         <div className="space-y-4">
           {posts.map((post) => (
-            <div
-              key={post.id}
-              className="bg-white border rounded-lg p-3 shadow-sm"
-            >
+            <div key={post.id} className="bg-white border rounded-lg p-3 shadow-sm">
               <div className="flex items-center mb-2">
                 <img
                   src={Icon}
                   alt="Avatar"
-                  className="w-10 h-10 rounded-full object-contain mr-3"
+                  className="w-10 h-10 rounded-full mr-3 object-cover"
                 />
                 <div>
                   <p className="font-semibold text-sm">Woodland Ways</p>
@@ -134,20 +140,14 @@ const Home = () => {
                 </div>
               </div>
               <p className="text-sm text-gray-800 mb-2">{post.text}</p>
-
               <div className="flex justify-around text-gray-500 text-xs border-t pt-2">
-                <div
-                  className={`flex items-center gap-1 cursor-pointer ${
-                    post.liked ? "text-orange-500" : ""
-                  }`}
-                  onClick={() => toggleLike(post.id)}
-                >
+                <div className="flex items-center gap-1 cursor-pointer">
                   <ThumbUp fontSize="small" />
                   <span>Like</span>
                 </div>
                 <div
                   className="flex items-center gap-1 cursor-pointer"
-                  onClick={() => toggleComment(post.id)}
+                  onClick={() => toggleComments(post.id)}
                 >
                   <ChatBubble fontSize="small" />
                   <span>Comment</span>
@@ -158,16 +158,39 @@ const Home = () => {
                 </div>
               </div>
 
-              {post.showComment && (
-                <div className="mt-2">
+              {/* Comments Section */}
+              {showComments[post.id] && (
+                <div className="mt-3">
+                  {(post.comments || []).map((comment) => (
+                    <div key={comment.id} className="mb-2 pl-2 border-l">
+                      <div className="flex items-center mb-1">
+                        <img
+                          src={Icon}
+                          alt="Comment Avatar"
+                          className="w-6 h-6 rounded-full mr-2 object-cover"
+                        />
+                        <div>
+                          <p className="text-xs font-semibold">Woodland Ways</p>
+                          <p className="text-[10px] text-gray-500">{moment(comment.timestamp).fromNow()}</p>
+                        </div>
+                      </div>
+                      <p className="text-sm ml-8">{comment.text}</p>
+                    </div>
+                  ))}
                   <textarea
-                    className="w-full border border-gray-300 rounded-md p-2 text-sm resize-none mt-2"
-                    rows={2}
+                    rows={1}
+                    className="w-full border border-gray-300 rounded-md p-2 text-sm mt-2 resize-y"
                     placeholder="Write a comment..."
-                    value={post.commentText}
+                    value={commentText[post.id] || ""}
                     onChange={(e) =>
-                      handleCommentChange(post.id, e.target.value)
+                      setCommentText({ ...commentText, [post.id]: e.target.value })
                     }
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleComment(post.id);
+                      }
+                    }}
                   />
                 </div>
               )}
@@ -176,6 +199,7 @@ const Home = () => {
         </div>
       </div>
 
+      {/* Bottom Nav */}
       <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200">
         <nav className="flex justify-around py-2 text-xs text-gray-700">
           <NavLink to="/" className="flex flex-col items-center text-orange-500">
