@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import moment from "moment";
 import Icon from "../../Icon.png";
 import { NavLink } from "react-router-dom";
 import {
@@ -35,7 +36,7 @@ const Home = () => {
       const newPost = {
         id: Date.now(),
         text: postText,
-        timestamp: new Date().toLocaleString(),
+        timestamp: new Date().toISOString(),
       };
       const updatedPosts = [newPost, ...posts];
       setPosts(updatedPosts);
@@ -100,11 +101,13 @@ const Home = () => {
                 <img
                   src={Icon}
                   alt="Avatar"
-                  className="w-10 h-10 rounded-full object-cover mr-3"
+                  className="w-10 h-10 rounded-full mr-3"
                 />
                 <div>
                   <p className="font-semibold text-sm">Woodland Ways</p>
-                  <p className="text-xs text-gray-500">Instructor • {post.timestamp}</p>
+                  <p className="text-xs text-gray-500">
+                    Instructor • {moment(post.timestamp).fromNow()}
+                  </p>
                 </div>
               </div>
               <p className="text-sm text-gray-800 mb-2">{post.text}</p>
