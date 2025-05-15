@@ -1,118 +1,117 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaThumbsUp, FaComment, FaPaperPlane } from 'react-icons/fa';
-import logo from '../../assets/Logo.png';
+import { Home as HomeIcon, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-material';
+import { FaThumbsUp, FaCommentAlt, FaPaperPlane } from 'react-icons/fa';
+import Logo from '../../Icon.png';
 
 const Home = () => {
   const [postText, setPostText] = useState('');
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('ww_feed');
-    if (saved) {
-      setPosts(JSON.parse(saved));
-    }
+    const stored = localStorage.getItem('ww-posts');
+    if (stored) setPosts(JSON.parse(stored));
   }, []);
 
   const handlePost = () => {
     if (!postText.trim()) return;
     const newPost = {
+      id: Date.now(),
       text: postText,
-      date: new Date().toLocaleString(),
-      avatar: 'https://ui-avatars.com/api/?name=WW+User'
+      timestamp: new Date().toLocaleString(),
     };
-    const updatedPosts = [newPost, ...posts];
-    setPosts(updatedPosts);
-    localStorage.setItem('ww_feed', JSON.stringify(updatedPosts));
+    const updated = [newPost, ...posts];
+    setPosts(updated);
+    localStorage.setItem('ww-posts', JSON.stringify(updated));
     setPostText('');
   };
 
   return (
-    <div className="max-w-md mx-auto min-h-screen bg-white flex flex-col justify-between shadow-sm">
+    <div className="max-w-md mx-auto bg-white min-h-screen shadow-sm flex flex-col justify-between">
       {/* Header */}
-      <header className="bg-orange-500 py-3 px-4 flex justify-center items-center">
-        <h1 className="text-white font-bold text-lg">Staff Portal</h1>
+      <header className="flex items-center justify-center px-4 py-3 bg-orange-500 text-white relative">
+        <h1 className="text-xl font-bold">Staff Portal</h1>
       </header>
 
-      {/* Feed Area */}
-      <div className="flex-1 px-4 pb-20 overflow-y-auto">
-        <div className="flex justify-center mt-4">
-          <img src={logo} alt="Woodland Ways" className="h-24 w-auto object-contain" />
+      {/* Feed */}
+      <div className="flex-1 overflow-y-auto px-4 pb-20 space-y-4">
+        {/* Large Center Logo */}
+        <div className="flex justify-center py-4">
+          <img src={Logo} alt="Woodland Ways Logo" className="h-28 w-auto object-contain" />
         </div>
 
         {/* Post Box */}
-        <div className="mt-4 mb-4">
+        <div className="bg-gray-100 rounded-xl p-3 shadow">
           <textarea
-            className="w-full p-3 border rounded-md text-sm"
-            placeholder="What's happening?"
+            rows={3}
             value={postText}
             onChange={(e) => setPostText(e.target.value)}
+            placeholder="Share an update..."
+            className="w-full border border-gray-300 rounded-md p-2 text-sm resize-none"
           />
           <button
             onClick={handlePost}
-            className="mt-2 bg-orange-500 text-white px-4 py-2 rounded-md text-sm float-right"
+            className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm mt-2 float-right"
           >
             Post
           </button>
         </div>
 
         {/* Posts */}
-        <div className="space-y-4 mt-6">
-          {posts.map((post, idx) => (
-            <div key={idx} className="bg-gray-100 p-3 rounded-lg shadow-sm">
-              <div className="flex items-center gap-3 mb-2">
-                <img
-                  src={post.avatar}
-                  alt="User Avatar"
-                  className="w-8 h-8 rounded-full border border-orange-300"
-                />
-                <div>
-                  <p className="text-sm font-semibold text-gray-800">WW Instructor</p>
-                  <p className="text-xs text-gray-500">{post.date}</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-800 mb-2">{post.text}</p>
-              <div className="flex justify-between text-gray-500 text-xs">
-                <div className="flex items-center gap-2">
-                  <FaThumbsUp className="cursor-pointer" />
-                  <span>Like</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaComment className="cursor-pointer" />
-                  <span>Comment</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaPaperPlane className="cursor-pointer" />
-                  <span>Send</span>
-                </div>
+        {posts.map((post) => (
+          <div key={post.id} className="bg-white border rounded-lg p-3 shadow">
+            <div className="flex items-center space-x-2 mb-2">
+              <img
+                src={Logo}
+                alt="Avatar"
+                className="h-8 w-8 rounded-full object-cover"
+              />
+              <div>
+                <p className="font-semibold text-sm">Woodland Ways</p>
+                <p className="text-xs text-gray-500">{post.timestamp}</p>
               </div>
             </div>
-          ))}
-        </div>
+            <p className="text-sm text-gray-800">{post.text}</p>
+            <div className="flex justify-around mt-3 text-gray-600 text-sm">
+              <div className="flex items-center gap-1">
+                <FaThumbsUp size={14} />
+                <span>Like</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <FaCommentAlt size={14} />
+                <span>Comment</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <FaPaperPlane size={14} />
+                <span>Send</span>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Footer Nav */}
+      {/* Bottom Nav */}
       <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200">
         <nav className="flex justify-around py-2 text-xs text-gray-700">
           <NavLink to="/" className="flex flex-col items-center text-orange-500">
-            <span className="material-icons">home</span>
-            <span>Home</span>
+            <HomeIcon fontSize="medium" />
+            <span className="text-[11px]">Home</span>
           </NavLink>
           <NavLink to="/my-courses" className="flex flex-col items-center">
-            <span className="material-icons">assignment</span>
-            <span>Courses</span>
+            <Assignment fontSize="medium" />
+            <span className="text-[11px]">My Courses</span>
           </NavLink>
           <NavLink to="/calendar" className="flex flex-col items-center">
-            <span className="material-icons">calendar_month</span>
-            <span>Calendar</span>
+            <CalendarMonth fontSize="medium" />
+            <span className="text-[11px]">Calendar</span>
           </NavLink>
           <NavLink to="/handbook" className="flex flex-col items-center">
-            <span className="material-icons">menu_book</span>
-            <span>Handbook</span>
+            <MenuBook fontSize="medium" />
+            <span className="text-[11px]">Handbook</span>
           </NavLink>
           <NavLink to="/menu" className="flex flex-col items-center">
-            <span className="material-icons">menu</span>
-            <span>Menu</span>
+            <Menu fontSize="medium" />
+            <span className="text-[11px]">Menu</span>
           </NavLink>
         </nav>
       </footer>
