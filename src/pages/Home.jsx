@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../../Icon.png'; // Preload for Vercel
-import Icon from '../../Icon.png';
-import { Home, Assignment, CalendarMonth, MenuBook, Menu, ThumbUp, ChatBubbleOutline, Send } from '@mui/icons-material';
+import { ThumbUp, ChatBubbleOutline, Send } from '@mui/icons-material';
+import { Home as HomeIcon, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
 
 const Home = () => {
@@ -9,107 +8,108 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const savedPosts = JSON.parse(localStorage.getItem('staffPosts') || '[]');
+    const savedPosts = JSON.parse(localStorage.getItem('posts')) || [];
     setPosts(savedPosts);
   }, []);
 
   const handlePost = () => {
-    if (!postText.trim()) return;
-    const newPost = {
-      id: Date.now(),
-      name: 'Jon Magellan',
-      role: 'All-star contributor',
-      text: postText.trim(),
-      timestamp: new Date().toISOString(),
-    };
-    const updated = [newPost, ...posts];
-    setPosts(updated);
-    localStorage.setItem('staffPosts', JSON.stringify(updated));
-    setPostText('');
-  };
-
-  const timeAgo = (timestamp) => {
-    const diff = Math.floor((Date.now() - new Date(timestamp)) / 60000);
-    return diff < 1 ? 'just now' : `${diff}m ago`;
+    if (postText.trim() !== '') {
+      const newPosts = [{ name: 'Jon Magellan', role: 'All-star contributor', text: postText, time: 'just now' }, ...posts];
+      setPosts(newPosts);
+      localStorage.setItem('posts', JSON.stringify(newPosts));
+      setPostText('');
+    }
   };
 
   return (
-    <div className="max-w-md mx-auto min-h-screen bg-white flex flex-col justify-between">
+    <div className="flex flex-col items-center min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-orange-500 text-white py-3 px-4 text-center text-lg font-bold">
-        Staff Portal
-      </header>
+      <div className="w-full bg-orange-500 py-4 text-center">
+        <h1 className="text-white text-2xl font-bold">Staff Portal</h1>
+      </div>
 
-      <main className="flex-1 px-4 pb-24">
-        {/* Logo */}
-        <div className="flex justify-center mt-6">
-          <img src={Icon} alt="Woodland Ways" className="w-40 h-auto" />
+      {/* Main Logo */}
+      <div className="my-6">
+        <img src="../../Icon.png" alt="Woodland Ways Logo" className="w-48 h-48 mx-auto" />
+      </div>
+
+      {/* Post Box */}
+      <div className="w-[90%] bg-gray-100 p-4 rounded-xl shadow-sm">
+        <input
+          type="text"
+          placeholder="What's on your mind?"
+          className="w-full px-4 py-2 border border-gray-300 rounded-full mb-4 focus:outline-none"
+          value={postText}
+          onChange={(e) => setPostText(e.target.value)}
+        />
+        <div className="flex justify-between">
+          <button className="bg-orange-400 hover:bg-orange-500 text-white px-4 py-2 rounded-full">Photos</button>
+          <button className="bg-orange-400 hover:bg-orange-500 text-white px-4 py-2 rounded-full">Events</button>
+          <button className="bg-orange-400 hover:bg-orange-500 text-white px-4 py-2 rounded-full">Directory</button>
+          <button
+            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold"
+            onClick={handlePost}
+          >
+            Post
+          </button>
         </div>
+      </div>
 
-        {/* Post Box */}
-        <div className="mt-4 bg-gray-50 p-3 rounded-xl shadow">
-          <input
-            type="text"
-            placeholder="What's on your mind?"
-            value={postText}
-            onChange={(e) => setPostText(e.target.value)}
-            className="w-full p-2 text-sm border border-gray-300 rounded mb-3"
-          />
-          <div className="flex justify-between flex-wrap gap-2">
-            <button className="bg-orange-400 text-white rounded-full px-4 py-2 text-xs">Photos</button>
-            <button className="bg-orange-400 text-white rounded-full px-4 py-2 text-xs">Events</button>
-            <button className="bg-orange-400 text-white rounded-full px-4 py-2 text-xs">Directory</button>
-            <button onClick={handlePost} className="bg-orange-500 text-white rounded-full px-4 py-2 text-xs">Post</button>
-          </div>
-        </div>
-
-        {/* Feed */}
-        <div className="mt-6 space-y-4">
-          {posts.map((post) => (
-            <div key={post.id} className="bg-gray-100 p-3 rounded-xl shadow">
-              <div className="flex items-center gap-3 mb-1">
-                <img src={Icon} alt="avatar" className="w-8 h-8 rounded-full" />
-                <div>
-                  <p className="text-sm font-semibold">{post.name}</p>
-                  <p className="text-[11px] text-gray-500">{post.role} · {timeAgo(post.timestamp)}</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-800 mb-2">{post.text}</p>
-              <div className="flex justify-around text-gray-600 text-xs border-t border-gray-300 pt-2">
-                <div className="flex items-center gap-1"><ThumbUp fontSize="small" /> Like</div>
-                <div className="flex items-center gap-1"><ChatBubbleOutline fontSize="small" /> Comment</div>
-                <div className="flex items-center gap-1"><Send fontSize="small" /> Send</div>
+      {/* Posts Feed */}
+      <div className="w-[90%] mt-6 space-y-4 mb-32">
+        {posts.map((post, index) => (
+          <div key={index} className="bg-gray-100 p-4 rounded-xl shadow-sm">
+            <div className="flex items-center mb-2">
+              <img src="../../Icon.png" alt="avatar" className="w-8 h-8 rounded-full mr-3" />
+              <div>
+                <p className="font-bold text-sm">{post.name}</p>
+                <p className="text-xs text-gray-500">{post.role} · {post.time}</p>
               </div>
             </div>
-          ))}
-        </div>
-      </main>
+            <p className="text-sm mb-2">{post.text}</p>
+            <div className="flex space-x-6 mt-2 text-gray-600">
+              <button className="flex items-center space-x-1">
+                <ThumbUp fontSize="small" />
+                <span className="text-sm">Like</span>
+              </button>
+              <button className="flex items-center space-x-1">
+                <ChatBubbleOutline fontSize="small" />
+                <span className="text-sm">Comment</span>
+              </button>
+              <button className="flex items-center space-x-1">
+                <Send fontSize="small" />
+                <span className="text-sm">Send</span>
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* Bottom Nav */}
-      <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 z-50">
-        <nav className="flex justify-around py-2 text-xs text-gray-700">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-md">
+        <div className="flex justify-around py-2">
           <NavLink to="/" className="flex flex-col items-center text-orange-500">
-            <Home fontSize="medium" />
-            <span className="text-[11px]">Home</span>
+            <HomeIcon fontSize="medium" />
+            <span className="text-xs">Home</span>
           </NavLink>
-          <NavLink to="/my-courses" className="flex flex-col items-center">
+          <NavLink to="/my-courses" className="flex flex-col items-center text-gray-600">
             <Assignment fontSize="medium" />
-            <span className="text-[11px]">My Courses</span>
+            <span className="text-xs">My Courses</span>
           </NavLink>
-          <NavLink to="/calendar" className="flex flex-col items-center">
+          <NavLink to="/calendar" className="flex flex-col items-center text-gray-600">
             <CalendarMonth fontSize="medium" />
-            <span className="text-[11px]">Calendar</span>
+            <span className="text-xs">Calendar</span>
           </NavLink>
-          <NavLink to="/handbook" className="flex flex-col items-center">
+          <NavLink to="/handbook" className="flex flex-col items-center text-gray-600">
             <MenuBook fontSize="medium" />
-            <span className="text-[11px]">Handbook</span>
+            <span className="text-xs">Handbook</span>
           </NavLink>
-          <NavLink to="/menu" className="flex flex-col items-center">
+          <NavLink to="/menu" className="flex flex-col items-center text-gray-600">
             <Menu fontSize="medium" />
-            <span className="text-[11px]">Menu</span>
+            <span className="text-xs">Menu</span>
           </NavLink>
-        </nav>
-      </footer>
+        </div>
+      </nav>
     </div>
   );
 };
