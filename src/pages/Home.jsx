@@ -1,109 +1,101 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Home, Assignment, CalendarMonth, MenuBook, Menu } from '@mui/icons-material';
-import logo from '../../Icon.png'; // Adjust path if your logo is elsewhere
+import { Avatar } from '@mui/material';
+import { ThumbUpAltOutlined, ChatBubbleOutline, Send } from '@mui/icons-material';
+import logo from '../../Icon.png';
 
-const HomePage = () => {
+const Home = () => {
   const [posts, setPosts] = useState([]);
-  const [newPost, setNewPost] = useState('');
+  const [newPost, setNewPost] = useState("");
 
   useEffect(() => {
-    const savedPosts = JSON.parse(localStorage.getItem('staffPosts') || '[]');
-    setPosts(savedPosts);
+    const saved = JSON.parse(localStorage.getItem("feedPosts") || "[]");
+    setPosts(saved);
   }, []);
 
   const handlePost = () => {
-    if (!newPost.trim()) return;
+    if (newPost.trim() === "") return;
 
     const post = {
       id: Date.now(),
-      name: 'Jon Magellan', // Replace with dynamic name in future
+      name: "Jon Magellan",
+      badge: "All-star contributor",
+      avatar: logo,
       content: newPost,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      timestamp: new Date().toISOString(),
     };
 
-    const updatedPosts = [post, ...posts];
-    setPosts(updatedPosts);
-    localStorage.setItem('staffPosts', JSON.stringify(updatedPosts));
-    setNewPost('');
+    const updated = [post, ...posts];
+    setPosts(updated);
+    localStorage.setItem("feedPosts", JSON.stringify(updated));
+    setNewPost("");
+  };
+
+  const formatTimeAgo = (timestamp) => {
+    const diff = Math.floor((Date.now() - new Date(timestamp)) / 60000);
+    if (diff < 1) return "just now";
+    if (diff < 60) return `${diff}m ago`;
+    const hours = Math.floor(diff / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
   };
 
   return (
-    <div className="max-w-md mx-auto min-h-screen bg-white flex flex-col justify-between">
+    <div className="max-w-md mx-auto bg-white min-h-screen pb-20">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-2 bg-orange-500 text-white">
-        <div className="w-9 h-9">
-          <img src={logo} alt="Logo" className="w-full h-full object-contain" />
-        </div>
+      <header className="bg-orange-500 py-3 px-4 text-white flex justify-center items-center relative">
+        <h1 className="text-lg font-semibold absolute left-4">Staff Portal</h1>
+        <img src={logo} alt="Woodland Ways" className="h-10" />
       </header>
 
-      {/* Main Feed */}
-      <main className="flex-1 overflow-y-auto px-4 py-4">
-        <div className="bg-gray-100 rounded-xl p-3 shadow mb-4">
-          <textarea
-            className="w-full p-2 rounded border text-sm"
-            rows={2}
-            placeholder="What's on your mind?"
-            value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
-          />
-          <button
-            className="bg-orange-500 text-white text-sm px-4 py-1 mt-2 rounded-full float-right"
-            onClick={handlePost}
-          >
-            Post
-          </button>
-        </div>
+      {/* Logo */}
+      <div className="flex justify-center mt-4">
+        <img src={logo} alt="Woodland Ways" className="h-20" />
+      </div>
 
-        {/* Post Feed */}
+      {/* Post box */}
+      <div className="p-4">
+        <input
+          value={newPost}
+          onChange={(e) => setNewPost(e.target.value)}
+          placeholder="What's on your mind?"
+          className="w-full border rounded-full px-4 py-2 mb-2 shadow-sm focus:outline-none"
+        />
+        <div className="flex gap-2 mb-3">
+          <button className="bg-orange-400 text-white px-4 py-1 rounded-full text-sm">Photos</button>
+          <button className="bg-orange-400 text-white px-4 py-1 rounded-full text-sm">Events</button>
+          <button className="bg-orange-400 text-white px-4 py-1 rounded-full text-sm">Directory</button>
+        </div>
+        <button
+          onClick={handlePost}
+          className="bg-orange-500 text-white px-6 py-2 rounded-full float-right"
+        >
+          Post
+        </button>
+      </div>
+
+      {/* Feed */}
+      <div className="p-4 space-y-4 mt-4">
         {posts.map((post) => (
-          <div
-            key={post.id}
-            className="bg-gray-100 rounded-xl p-4 mb-3 shadow-sm"
-          >
-            <div className="flex items-center mb-1">
-              <div className="w-8 h-8 bg-gray-300 rounded-full mr-2"></div>
+          <div key={post.id} className="bg-gray-100 p-4 rounded-lg shadow-sm">
+            <div className="flex items-center mb-2">
+              <Avatar src={post.avatar} alt={post.name} className="mr-2 w-8 h-8" />
               <div>
-                <p className="font-semibold text-sm text-gray-800">{post.name}</p>
-                <p className="text-[11px] text-gray-500">{post.time}</p>
+                <p className="text-sm font-semibold">{post.name}</p>
+                <p className="text-xs text-gray-500">{post.badge} • {formatTimeAgo(post.timestamp)}</p>
               </div>
             </div>
-            <p className="text-sm text-gray-700 mt-2">{post.content}</p>
-            <div className="flex justify-start gap-6 mt-3 text-sm text-gray-600">
-              <button className="hover:text-blue-600">Like</button>
-              <button className="hover:text-blue-600">Comment</button>
+            <p className="text-sm text-gray-800">{post.content}</p>
+            <div className="flex justify-around mt-2 text-gray-600 text-sm">
+              <div className="flex items-center gap-1"><ThumbUpAltOutlined fontSize="small" /> Like</div>
+              <div className="flex items-center gap-1"><ChatBubbleOutline fontSize="small" /> Comment</div>
+              <div className="flex items-center gap-1"><Send fontSize="small" /> Send</div>
             </div>
           </div>
         ))}
-      </main>
-
-      {/* Bottom Navigation */}
-      <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200">
-        <nav className="flex justify-around py-2 text-xs text-gray-700">
-          <NavLink to="/" className="flex flex-col items-center text-orange-500">
-            <Home fontSize="medium" />
-            <span className="text-[11px]">Home</span>
-          </NavLink>
-          <NavLink to="/my-courses" className="flex flex-col items-center">
-            <Assignment fontSize="medium" />
-            <span className="text-[11px]">My Courses</span>
-          </NavLink>
-          <NavLink to="/calendar" className="flex flex-col items-center">
-            <CalendarMonth fontSize="medium" />
-            <span className="text-[11px]">Calendar</span>
-          </NavLink>
-          <NavLink to="/handbook" className="flex flex-col items-center">
-            <MenuBook fontSize="medium" />
-            <span className="text-[11px]">Handbook</span>
-          </NavLink>
-          <NavLink to="/menu" className="flex flex-col items-center">
-            <Menu fontSize="medium" />
-            <span className="text-[11px]">Menu</span>
-          </NavLink>
-        </nav>
-      </footer>
+      </div>
     </div>
   );
 };
 
-export default HomePage;
+export default Home;
