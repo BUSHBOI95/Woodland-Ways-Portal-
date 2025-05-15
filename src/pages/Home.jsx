@@ -1,98 +1,121 @@
-import React, { useState, useEffect } from "react";
-import { FaThumbsUp, FaCommentAlt, FaPaperPlane } from "react-icons/fa";
-import WWLogo from "../../Icon.png";
+import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import { FaThumbsUp, FaComment, FaPaperPlane } from 'react-icons/fa';
+import logo from '../../assets/Logo.png';
 
 const Home = () => {
-  const [postText, setPostText] = useState("");
-  const [posts, setPosts] = useState(() => {
-    const saved = localStorage.getItem("posts");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [postText, setPostText] = useState('');
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('ww_feed');
+    if (saved) {
+      setPosts(JSON.parse(saved));
+    }
+  }, []);
 
   const handlePost = () => {
-    if (postText.trim() === "") return;
+    if (!postText.trim()) return;
     const newPost = {
-      id: Date.now(),
-      author: "Jon Magellan",
-      role: "All-star contributor",
-      content: postText,
-      time: "just now",
-      avatar: WWLogo,
-      likes: 0,
-      comments: [],
+      text: postText,
+      date: new Date().toLocaleString(),
+      avatar: 'https://ui-avatars.com/api/?name=WW+User'
     };
     const updatedPosts = [newPost, ...posts];
     setPosts(updatedPosts);
-    localStorage.setItem("posts", JSON.stringify(updatedPosts));
-    setPostText("");
+    localStorage.setItem('ww_feed', JSON.stringify(updatedPosts));
+    setPostText('');
   };
 
   return (
-    <div className="flex flex-col items-center p-4 space-y-4 bg-white min-h-screen">
-      <div className="w-full bg-orange-500 py-3 text-white text-center text-2xl font-bold shadow">
-        Staff Portal
-      </div>
-      <img src={WWLogo} alt="Woodland Ways" className="w-48 md:w-64 mt-2" />
-      <div className="w-full max-w-md bg-gray-100 p-4 rounded-lg shadow">
-        <input
-          type="text"
-          placeholder="What's on your mind?"
-          className="w-full border border-gray-300 rounded-full px-4 py-2 text-gray-700 mb-3 focus:outline-none"
-          value={postText}
-          onChange={(e) => setPostText(e.target.value)}
-        />
-        <div className="flex justify-between space-x-2">
-          <button className="bg-orange-400 text-white rounded-full px-4 py-2 font-semibold">
-            Photos
-          </button>
-          <button className="bg-orange-400 text-white rounded-full px-4 py-2 font-semibold">
-            Events
-          </button>
-          <button className="bg-orange-400 text-white rounded-full px-4 py-2 font-semibold">
-            Directory
-          </button>
+    <div className="max-w-md mx-auto min-h-screen bg-white flex flex-col justify-between shadow-sm">
+      {/* Header */}
+      <header className="bg-orange-500 py-3 px-4 flex justify-center items-center">
+        <h1 className="text-white font-bold text-lg">Staff Portal</h1>
+      </header>
+
+      {/* Feed Area */}
+      <div className="flex-1 px-4 pb-20 overflow-y-auto">
+        <div className="flex justify-center mt-4">
+          <img src={logo} alt="Woodland Ways" className="h-24 w-auto object-contain" />
+        </div>
+
+        {/* Post Box */}
+        <div className="mt-4 mb-4">
+          <textarea
+            className="w-full p-3 border rounded-md text-sm"
+            placeholder="What's happening?"
+            value={postText}
+            onChange={(e) => setPostText(e.target.value)}
+          />
           <button
             onClick={handlePost}
-            className="bg-orange-500 text-white rounded-full px-4 py-2 font-bold"
+            className="mt-2 bg-orange-500 text-white px-4 py-2 rounded-md text-sm float-right"
           >
             Post
           </button>
         </div>
-      </div>
-      <div className="w-full max-w-md space-y-4">
-        {posts.map((post) => (
-          <div key={post.id} className="bg-gray-100 p-4 rounded-lg shadow">
-            <div className="flex items-center mb-2">
-              <img
-                src={post.avatar}
-                alt="avatar"
-                className="w-8 h-8 rounded-full mr-2"
-              />
-              <div>
-                <p className="font-semibold">{post.author}</p>
-                <p className="text-xs text-gray-500">
-                  {post.role} · {post.time}
-                </p>
+
+        {/* Posts */}
+        <div className="space-y-4 mt-6">
+          {posts.map((post, idx) => (
+            <div key={idx} className="bg-gray-100 p-3 rounded-lg shadow-sm">
+              <div className="flex items-center gap-3 mb-2">
+                <img
+                  src={post.avatar}
+                  alt="User Avatar"
+                  className="w-8 h-8 rounded-full border border-orange-300"
+                />
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">WW Instructor</p>
+                  <p className="text-xs text-gray-500">{post.date}</p>
+                </div>
+              </div>
+              <p className="text-sm text-gray-800 mb-2">{post.text}</p>
+              <div className="flex justify-between text-gray-500 text-xs">
+                <div className="flex items-center gap-2">
+                  <FaThumbsUp className="cursor-pointer" />
+                  <span>Like</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaComment className="cursor-pointer" />
+                  <span>Comment</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaPaperPlane className="cursor-pointer" />
+                  <span>Send</span>
+                </div>
               </div>
             </div>
-            <p className="text-gray-800 mb-2">{post.content}</p>
-            <div className="flex justify-around text-gray-600 text-sm">
-              <button className="flex items-center space-x-1">
-                <FaThumbsUp />
-                <span>Like</span>
-              </button>
-              <button className="flex items-center space-x-1">
-                <FaCommentAlt />
-                <span>Comment</span>
-              </button>
-              <button className="flex items-center space-x-1">
-                <FaPaperPlane />
-                <span>Send</span>
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+      {/* Footer Nav */}
+      <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200">
+        <nav className="flex justify-around py-2 text-xs text-gray-700">
+          <NavLink to="/" className="flex flex-col items-center text-orange-500">
+            <span className="material-icons">home</span>
+            <span>Home</span>
+          </NavLink>
+          <NavLink to="/my-courses" className="flex flex-col items-center">
+            <span className="material-icons">assignment</span>
+            <span>Courses</span>
+          </NavLink>
+          <NavLink to="/calendar" className="flex flex-col items-center">
+            <span className="material-icons">calendar_month</span>
+            <span>Calendar</span>
+          </NavLink>
+          <NavLink to="/handbook" className="flex flex-col items-center">
+            <span className="material-icons">menu_book</span>
+            <span>Handbook</span>
+          </NavLink>
+          <NavLink to="/menu" className="flex flex-col items-center">
+            <span className="material-icons">menu</span>
+            <span>Menu</span>
+          </NavLink>
+        </nav>
+      </footer>
     </div>
   );
 };
