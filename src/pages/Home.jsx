@@ -1,7 +1,4 @@
-// FILE: src/pages/Home.jsx
-
 import React, { useEffect, useState } from 'react';
-import WWLogo from '../assets/Icon.png';
 import { ThumbUpAltOutlined, ChatBubbleOutlineOutlined, SendOutlined } from '@mui/icons-material';
 
 const Home = () => {
@@ -18,7 +15,7 @@ const Home = () => {
     const newPost = {
       name: "Jon Magellan",
       badge: "All-star contributor",
-      avatar: WWLogo,
+      avatar: "/Icon.png",
       content: postContent,
       timestamp: new Date().toISOString()
     };
@@ -48,7 +45,7 @@ const Home = () => {
       <main className="flex-1 overflow-y-auto p-4 pb-24">
         {/* Logo */}
         <div className="flex flex-col items-center">
-          <img src={WWLogo} alt="Woodland Ways Logo" className="w-32 h-auto my-4" />
+          <img src="/Icon.png" alt="Woodland Ways Logo" className="w-40 h-auto my-4" />
         </div>
 
         {/* Post Input */}
