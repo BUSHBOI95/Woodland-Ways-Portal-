@@ -100,7 +100,7 @@ const Home = () => {
                 <img
                   src={Icon}
                   alt="Avatar"
-                  className="w-10 h-10 rounded-full mr-3"
+                  className="w-10 h-10 rounded-full object-cover mr-3"
                 />
                 <div>
                   <p className="font-semibold text-sm">Woodland Ways</p>
