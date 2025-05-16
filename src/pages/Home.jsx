@@ -1,240 +1,175 @@
-import React, { useState, useEffect } from "react";
-import Icon from "../../Icon.png";
-import { NavLink } from "react-router-dom";
-import {
-  Home as HomeIcon,
-  Assignment,
-  CalendarMonth,
-  MenuBook,
-  Menu,
-  Photo,
-  Event,
-  Group,
-  Send,
-  ThumbUp,
-  ChatBubble,
-  Reply,
-} from "@mui/icons-material";
+import React, { useState } from "react";
 import moment from "moment";
+import { FaThumbsUp, FaRegCommentDots, FaPaperPlane } from "react-icons/fa";
+
+import logo from "../../Icon.png";
+import avatar from "../../avatar.png";
 
 const Home = () => {
   const [postText, setPostText] = useState("");
   const [posts, setPosts] = useState([]);
+  const [commentInputs, setCommentInputs] = useState({});
+  const [likes, setLikes] = useState({});
+  const [commentLikes, setCommentLikes] = useState({});
+  const [replies, setReplies] = useState({});
 
-  useEffect(() => {
-    const savedPosts = localStorage.getItem("posts");
-    if (savedPosts) {
-      setPosts(JSON.parse(savedPosts));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("posts", JSON.stringify(posts));
-  }, [posts]);
-
-  const handlePost = () => {
-    if (postText.trim()) {
-      const newPost = {
-        id: Date.now(),
-        text: postText,
-        timestamp: new Date().toISOString(),
-        comments: [],
-        likes: 0,
-      };
-      setPosts([newPost, ...posts]);
-      setPostText("");
-    }
+  const handlePostSubmit = () => {
+    if (postText.trim() === "") return;
+    const newPost = {
+      id: Date.now(),
+      text: postText,
+      timestamp: new Date(),
+      comments: [],
+    };
+    setPosts([newPost, ...posts]);
+    setPostText("");
   };
 
-  const handleLike = (postId) => {
-    setPosts(
-      posts.map((post) =>
-        post.id === postId ? { ...post, likes: post.likes + 1 } : post
+  const handleCommentChange = (postId, value) => {
+    setCommentInputs({ ...commentInputs, [postId]: value });
+  };
+
+  const handleCommentSubmit = (postId) => {
+    const comment = commentInputs[postId]?.trim();
+    if (!comment) return;
+    const newComment = {
+      id: Date.now(),
+      text: comment,
+      timestamp: new Date(),
+    };
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId
+          ? { ...post, comments: [...post.comments, newComment] }
+          : post
       )
     );
+    setCommentInputs({ ...commentInputs, [postId]: "" });
   };
 
-  const handleComment = (postId, commentText) => {
-    if (!commentText.trim()) return;
-    const updatedPosts = posts.map((post) =>
-      post.id === postId
-        ? {
-            ...post,
-            comments: [
-              ...post.comments,
-              {
-                id: Date.now(),
-                text: commentText,
-                timestamp: new Date().toISOString(),
-              },
-            ],
-          }
-        : post
-    );
-    setPosts(updatedPosts);
+  const toggleLike = (postId) => {
+    setLikes((prevLikes) => ({
+      ...prevLikes,
+      [postId]: (prevLikes[postId] || 0) + 1,
+    }));
+  };
+
+  const toggleCommentLike = (commentId) => {
+    setCommentLikes((prev) => ({
+      ...prev,
+      [commentId]: (prev[commentId] || 0) + 1,
+    }));
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white min-h-screen shadow-sm flex flex-col justify-between">
-      <header className="bg-orange-500 text-white px-4 py-3 flex justify-center items-center">
-        <h1 className="text-xl font-bold">Staff Portal</h1>
-      </header>
+    <div className="min-h-screen bg-white text-gray-800 pb-20">
+      <div className="bg-orange-500 text-white text-xl font-bold py-3 text-center">
+        Staff Portal
+      </div>
 
-      <div className="flex-1 overflow-y-auto px-4 pb-24">
-        <div className="flex justify-center py-3">
-          <img
-            src={Icon}
-            alt="Woodland Ways Logo"
-            className="h-24 w-auto object-contain"
-          />
+      <div className="flex justify-center mt-4">
+        <img src={logo} alt="Woodland Ways Logo" className="h-24" />
+      </div>
+
+      <div className="flex flex-col items-center my-4">
+        <textarea
+          className="w-11/12 border rounded-md p-3 text-sm"
+          rows={3}
+          placeholder="What's on your mind?"
+          value={postText}
+          onChange={(e) => setPostText(e.target.value)}
+        />
+        <button
+          onClick={handlePostSubmit}
+          className="mt-2 px-4 py-2 bg-orange-500 text-white font-semibold rounded-full"
+        >
+          Post
+        </button>
+      </div>
+
+      <div className="flex justify-around py-2 text-sm text-gray-600 border-y">
+        <div className="flex flex-col items-center">
+          <img src="/photos.png" alt="Photos" className="h-6 mb-1" />
+          <span>Photos</span>
         </div>
-
-        <div className="bg-gray-100 rounded-xl p-3 mb-4 shadow-sm">
-          <textarea
-            className="w-full border border-gray-300 rounded-md p-2 text-sm resize-none focus:outline-orange-400"
-            rows={3}
-            placeholder="What's on your mind?"
-            value={postText}
-            onChange={(e) => setPostText(e.target.value)}
-          />
-          <button
-            onClick={handlePost}
-            className="bg-orange-500 text-white px-4 py-2 mt-2 rounded-full text-sm float-right hover:bg-orange-600 transition"
-          >
-            Post
-          </button>
+        <div className="flex flex-col items-center">
+          <img src="/events.png" alt="Events" className="h-6 mb-1" />
+          <span>Events</span>
         </div>
-
-        <div className="grid grid-cols-3 gap-2 mb-4 text-center text-sm">
-          <div className="flex flex-col items-center text-gray-700">
-            <Photo fontSize="small" />
-            <span>Photos</span>
-          </div>
-          <div className="flex flex-col items-center text-gray-700">
-            <Event fontSize="small" />
-            <span>Events</span>
-          </div>
-          <div className="flex flex-col items-center text-gray-700">
-            <Group fontSize="small" />
-            <span>Directory</span>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          {posts.map((post) => (
-            <div
-              key={post.id}
-              className="bg-white border rounded-xl p-3 shadow-md"
-            >
-              <div className="flex items-center mb-2">
-                <img
-                  src={Icon}
-                  alt="Avatar"
-                  className="w-10 h-10 rounded-full mr-3 border border-gray-300"
-                />
-                <div>
-                  <p className="font-semibold text-sm">Woodland Ways</p>
-                  <p className="text-xs text-gray-500">
-                    Instructor • {moment(post.timestamp).fromNow()}
-                  </p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-800 mb-2">{post.text}</p>
-              <div className="flex justify-around text-gray-500 text-xs border-t pt-2">
-                <button
-                  onClick={() => handleLike(post.id)}
-                  className="flex items-center gap-1 hover:text-orange-500 transition"
-                >
-                  <ThumbUp fontSize="small" />
-                  <span>Like {post.likes}</span>
-                </button>
-                <div className="flex items-center gap-1">
-                  <ChatBubble fontSize="small" />
-                  <span>Comment</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Send fontSize="small" />
-                  <span>Send</span>
-                </div>
-              </div>
-
-              {/* Comments */}
-              <div className="mt-3 space-y-2">
-                {post.comments &&
-                  post.comments.map((comment) => (
-                    <div
-                      key={comment.id}
-                      className="bg-gray-100 rounded-2xl px-3 py-2 shadow-sm"
-                    >
-                      <div className="flex items-center mb-1">
-                        <img
-                          src={Icon}
-                          alt="Commenter"
-                          className="w-6 h-6 rounded-full mr-2 border"
-                        />
-                        <div>
-                          <p className="text-xs font-semibold">Woodland Ways</p>
-                          <p className="text-[10px] text-gray-400">
-                            {moment(comment.timestamp).fromNow()}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="text-xs text-gray-700">{comment.text}</p>
-                      <div className="flex gap-4 mt-1 text-[10px] text-gray-500 pl-8">
-                        <span className="cursor-pointer hover:text-orange-500 transition">Like</span>
-                        <span className="cursor-pointer hover:text-orange-500 transition">Reply</span>
-                      </div>
-                    </div>
-                  ))}
-                <form
-                  className="flex items-center mt-2 gap-2"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const commentText = e.target.elements.comment.value;
-                    handleComment(post.id, commentText);
-                    e.target.reset();
-                  }}
-                >
-                  <input
-                    name="comment"
-                    type="text"
-                    placeholder="Write a comment..."
-                    className="flex-1 border border-gray-300 rounded-full px-4 py-1 text-xs focus:outline-orange-400"
-                  />
-                  <button type="submit" className="text-orange-500 hover:text-orange-600">
-                    <Send fontSize="small" />
-                  </button>
-                </form>
-              </div>
-            </div>
-          ))}
+        <div className="flex flex-col items-center">
+          <img src="/directory.png" alt="Directory" className="h-6 mb-1" />
+          <span>Directory</span>
         </div>
       </div>
 
-      <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-10">
-        <nav className="flex justify-around py-2 text-xs text-gray-700">
-          <NavLink to="/" className="flex flex-col items-center text-orange-500">
-            <HomeIcon fontSize="medium" />
-            <span className="text-[11px]">Home</span>
-          </NavLink>
-          <NavLink to="/my-courses" className="flex flex-col items-center">
-            <Assignment fontSize="medium" />
-            <span className="text-[11px]">My Courses</span>
-          </NavLink>
-          <NavLink to="/calendar" className="flex flex-col items-center">
-            <CalendarMonth fontSize="medium" />
-            <span className="text-[11px]">Calendar</span>
-          </NavLink>
-          <NavLink to="/handbook" className="flex flex-col items-center">
-            <MenuBook fontSize="medium" />
-            <span className="text-[11px]">Handbook</span>
-          </NavLink>
-          <NavLink to="/menu" className="flex flex-col items-center">
-            <Menu fontSize="medium" />
-            <span className="text-[11px]">Menu</span>
-          </NavLink>
-        </nav>
-      </footer>
+      <div className="px-4 mt-4 space-y-4">
+        {posts.map((post) => (
+          <div key={post.id} className="bg-white shadow rounded-lg p-4">
+            <div className="flex items-center space-x-3 mb-2">
+              <img src={avatar} alt="avatar" className="h-10 w-10 rounded-full" />
+              <div>
+                <p className="font-semibold text-sm">Woodland Ways</p>
+                <p className="text-xs text-gray-500">
+                  Instructor • {moment(post.timestamp).fromNow()}
+                </p>
+              </div>
+            </div>
+            <p className="text-gray-800 mb-3">{post.text}</p>
+            <div className="flex items-center gap-6 mb-2 text-gray-600 text-sm">
+              <button onClick={() => toggleLike(post.id)} className="flex items-center gap-1">
+                <FaThumbsUp /> Like ({likes[post.id] || 0})
+              </button>
+              <div className="flex items-center gap-1">
+                <FaRegCommentDots /> Comment
+              </div>
+              <div className="flex items-center gap-1">
+                <FaPaperPlane /> Send
+              </div>
+            </div>
+            <div className="relative">
+              <input
+                value={commentInputs[post.id] || ""}
+                onChange={(e) => handleCommentChange(post.id, e.target.value)}
+                placeholder="Write a comment..."
+                className="w-full border rounded-full px-4 py-2 pr-10 text-sm"
+              />
+              <button
+                onClick={() => handleCommentSubmit(post.id)}
+                className="absolute right-3 top-2 text-orange-500"
+              >
+                <FaPaperPlane />
+              </button>
+            </div>
+            <div className="mt-3 space-y-2">
+              {post.comments.map((comment) => (
+                <div
+                  key={comment.id}
+                  className="bg-gray-100 rounded-xl p-3 ml-10 text-sm"
+                >
+                  <div className="flex items-center space-x-2 mb-1">
+                    <img
+                      src={avatar}
+                      alt="avatar"
+                      className="h-6 w-6 rounded-full"
+                    />
+                    <span className="font-semibold text-xs">Instructor</span>
+                    <span className="text-xs text-gray-500">
+                      {moment(comment.timestamp).fromNow()}
+                    </span>
+                  </div>
+                  <p>{comment.text}</p>
+                  <div className="flex items-center gap-4 mt-1 text-xs text-gray-600 ml-8">
+                    <button onClick={() => toggleCommentLike(comment.id)}>
+                      Like ({commentLikes[comment.id] || 0})
+                    </button>
+                    <button>Reply</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
