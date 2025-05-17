@@ -1,195 +1,192 @@
 import React, { useState } from "react";
-import { ThumbUp, ChatBubbleOutline, Send, Image, Event, Group, Home, School, CalendarMonth, MenuBook, Menu } from "@mui/icons-material";
 import moment from "moment";
 import WWLogo from "../../Icon.png";
+import {
+  Home as HomeIcon,
+  MenuBook,
+  CalendarMonth,
+  Menu,
+  Image,
+  Event,
+  Group,
+  ThumbUpAltRounded,
+  ChatBubbleOutlineRounded,
+  SendRounded,
+  ReplyRounded,
+} from "@mui/icons-material";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState("");
-  const [comments, setComments] = useState({});
-  const [newComment, setNewComment] = useState({});
-  const [likes, setLikes] = useState({});
-  const [commentLikes, setCommentLikes] = useState({});
-  const [showCommentBox, setShowCommentBox] = useState({});
 
   const handlePost = () => {
-    if (!newPost.trim()) return;
-    const post = {
-      id: Date.now(),
-      author: "Woodland Ways",
-      role: "Instructor",
-      content: newPost,
-      timestamp: new Date(),
-      likes: 0,
-      comments: [],
-    };
-    setPosts([post, ...posts]);
-    setNewPost("");
+    if (newPost.trim()) {
+      const post = {
+        id: Date.now(),
+        author: "Woodland Ways",
+        role: "Instructor",
+        timestamp: moment(),
+        content: newPost,
+        likes: 0,
+        comments: [],
+      };
+      setPosts([post, ...posts]);
+      setNewPost("");
+    }
   };
 
-  const handleComment = (postId) => {
-    const content = newComment[postId];
-    if (!content?.trim()) return;
+  const handleLikePost = (postId) => {
+    setPosts(posts.map(post => post.id === postId ? { ...post, likes: post.likes + 1 } : post));
+  };
 
-    const comment = {
-      id: Date.now(),
-      author: "Woodland Ways",
-      role: "Instructor",
-      content: content,
-      timestamp: new Date(),
-      likes: 0,
-    };
-
-    const updatedPosts = posts.map((post) =>
+  const handleLikeComment = (postId, commentId) => {
+    setPosts(posts.map(post =>
       post.id === postId
-        ? { ...post, comments: [...post.comments, comment] }
+        ? {
+            ...post,
+            comments: post.comments.map(comment =>
+              comment.id === commentId
+                ? { ...comment, likes: (comment.likes || 0) + 1 }
+                : comment
+            ),
+          }
         : post
-    );
-
-    setPosts(updatedPosts);
-    setNewComment({ ...newComment, [postId]: "" });
+    ));
   };
 
-  const toggleLike = (postId) => {
-    setLikes((prev) => {
-      const alreadyLiked = prev[postId];
-      return {
-        ...prev,
-        [postId]: !alreadyLiked,
+  const handleComment = (postId, commentText) => {
+    if (commentText.trim()) {
+      const newComment = {
+        id: Date.now(),
+        author: "Woodland Ways",
+        timestamp: moment(),
+        content: commentText,
+        likes: 0,
       };
-    });
-  };
-
-  const toggleCommentLike = (postId, commentId) => {
-    setCommentLikes((prev) => {
-      const key = `${postId}-${commentId}`;
-      const alreadyLiked = prev[key];
-      return {
-        ...prev,
-        [key]: !alreadyLiked,
-      };
-    });
+      setPosts(posts.map(post =>
+        post.id === postId
+          ? { ...post, comments: [...post.comments, newComment] }
+          : post
+      ));
+    }
   };
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
-      <h1 className="text-center text-xl font-bold text-white bg-orange-600 p-3 rounded-t">Staff Portal</h1>
-      <div className="flex justify-center py-2">
-        <img src={WWLogo} alt="Woodland Ways" className="w-24 h-24 object-contain" />
-      </div>
-
-      <input
-        type="text"
-        value={newPost}
-        onChange={(e) => setNewPost(e.target.value)}
-        placeholder="What's on your mind?"
-        className="w-full p-2 border rounded-md mb-3"
-      />
-      <button onClick={handlePost} className="bg-orange-500 text-white px-4 py-2 rounded float-right mb-4">
-        Post
-      </button>
-
-      <div className="flex justify-around text-gray-600 mb-4">
-        <div className="flex flex-col items-center text-xs">
-          <Image />
-          Photos
+    <div className="min-h-screen bg-white flex flex-col justify-between">
+      <div className="p-4">
+        <div className="bg-orange-500 text-white text-center py-2 text-xl font-semibold rounded-t-lg">
+          Staff Portal
         </div>
-        <div className="flex flex-col items-center text-xs">
-          <Event />
-          Events
+        <div className="flex justify-center my-4">
+          <img src={WWLogo} alt="Woodland Ways Logo" className="h-24" />
         </div>
-        <div className="flex flex-col items-center text-xs">
-          <Group />
-          Directory
-        </div>
-      </div>
 
-      {posts.map((post) => (
-        <div key={post.id} className="bg-white rounded-md shadow p-3 mb-4">
-          <div className="flex items-center gap-2">
-            <img src={WWLogo} alt="avatar" className="w-8 h-8 rounded-full" />
-            <div>
-              <p className="font-bold text-sm">{post.author}</p>
-              <p className="text-xs text-gray-400">{post.role} • {moment(post.timestamp).fromNow()}</p>
+        <textarea
+          placeholder="What's on your mind?"
+          value={newPost}
+          onChange={(e) => setNewPost(e.target.value)}
+          className="w-full p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex gap-6 px-2">
+            <div className="flex flex-col items-center text-xs text-gray-600">
+              <Image fontSize="medium" />
+              Photos
+            </div>
+            <div className="flex flex-col items-center text-xs text-gray-600">
+              <Event fontSize="medium" />
+              Events
+            </div>
+            <div className="flex flex-col items-center text-xs text-gray-600">
+              <Group fontSize="medium" />
+              Directory
             </div>
           </div>
-          <p className="mt-2">{post.content}</p>
+          <button
+            onClick={handlePost}
+            className="bg-orange-500 text-white px-4 py-1 rounded-full font-semibold shadow-md hover:bg-orange-600"
+          >
+            Post
+          </button>
+        </div>
 
-          <div className="flex items-center justify-around text-sm mt-2 text-gray-600">
-            <button onClick={() => toggleLike(post.id)} className="flex items-center gap-1">
-              <ThumbUp className="text-gray-600" fontSize="small" />
-              {likes[post.id] ? "Unlike" : "Like"} ({likes[post.id] ? 1 : 0})
-            </button>
-            <button onClick={() => setShowCommentBox({ ...showCommentBox, [post.id]: !showCommentBox[post.id] })} className="flex items-center gap-1">
-              <ChatBubbleOutline className="text-gray-600" fontSize="small" />
-              Comment
-            </button>
-            <button className="flex items-center gap-1">
-              <Send className="text-gray-600" fontSize="small" />
-              Send
-            </button>
-          </div>
-
-          {showCommentBox[post.id] && (
-            <>
-              <div className="mt-2 flex items-center border rounded-md px-2">
-                <img src={WWLogo} alt="avatar" className="w-6 h-6 rounded-full mr-2" />
-                <input
-                  type="text"
-                  value={newComment[post.id] || ""}
-                  onChange={(e) =>
-                    setNewComment({ ...newComment, [post.id]: e.target.value })
-                  }
-                  placeholder="Write a comment..."
-                  className="flex-1 p-1"
-                />
-                <button
-                  onClick={() => handleComment(post.id)}
-                  className="text-orange-500 font-bold text-lg ml-2"
-                >
-                  →
-                </button>
+        {posts.map(post => (
+          <div key={post.id} className="mt-6 p-4 border rounded-lg shadow-sm bg-white">
+            <div className="flex items-center gap-2 mb-2">
+              <img src={WWLogo} alt="Avatar" className="h-6 w-6 rounded-full" />
+              <div>
+                <p className="text-sm font-bold">Woodland Ways</p>
+                <p className="text-xs text-gray-500">{post.role} • {post.timestamp.fromNow()}</p>
               </div>
-              {post.comments.map((comment) => (
-                <div key={comment.id} className="bg-gray-100 rounded-md p-2 mt-2 ml-6">
-                  <div className="flex items-center gap-2">
-                    <img src={WWLogo} alt="avatar" className="w-6 h-6 rounded-full" />
-                    <div>
-                      <p className="font-bold text-sm">{comment.author}</p>
-                      <p className="text-xs text-gray-400">{moment(comment.timestamp).fromNow()}</p>
-                    </div>
-                  </div>
-                  <p className="ml-8">{comment.content}</p>
-                  <div className="flex items-center gap-4 ml-8 text-xs text-gray-500 mt-1">
-                    <button onClick={() => toggleCommentLike(post.id, comment.id)}>
-                      Like ({commentLikes[`${post.id}-${comment.id}`] ? 1 : 0})
-                    </button>
-                    <button>Reply</button>
+            </div>
+            <p className="mb-3">{post.content}</p>
+            <div className="flex items-center text-gray-600 text-sm gap-4 mb-3">
+              <button onClick={() => handleLikePost(post.id)} className="flex items-center gap-1">
+                <ThumbUpAltRounded className="text-gray-600" fontSize="small" />
+                Like ({post.likes})
+              </button>
+              <div className="flex items-center gap-1">
+                <ChatBubbleOutlineRounded className="text-gray-600" fontSize="small" />
+                Comment
+              </div>
+              <div className="flex items-center gap-1">
+                <SendRounded className="text-gray-600" fontSize="small" />
+                Send
+              </div>
+            </div>
+
+            {post.comments.map(comment => (
+              <div key={comment.id} className="bg-gray-100 p-3 rounded-lg mb-2 ml-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <img src={WWLogo} alt="Avatar" className="h-5 w-5 rounded-full" />
+                  <p className="text-sm font-bold">Woodland Ways</p>
+                  <p className="text-xs text-gray-500 ml-auto">{comment.timestamp.fromNow()}</p>
+                </div>
+                <p className="text-sm">{comment.content}</p>
+                <div className="flex items-center gap-4 text-sm mt-1 text-gray-600">
+                  <button onClick={() => handleLikeComment(post.id, comment.id)} className="flex items-center gap-1">
+                    <ThumbUpAltRounded className="text-gray-600" fontSize="small" />
+                    Like ({comment.likes})
+                  </button>
+                  <div className="flex items-center gap-1">
+                    <ReplyRounded className="text-gray-600" fontSize="small" />
+                    Reply
                   </div>
                 </div>
-              ))}
-            </>
-          )}
-        </div>
-      ))}
+              </div>
+            ))}
 
-      {/* NavBar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2">
+            <div className="flex items-center mt-2 gap-2">
+              <img src={WWLogo} alt="Avatar" className="h-6 w-6 rounded-full" />
+              <input
+                type="text"
+                placeholder="Write a comment..."
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleComment(post.id, e.target.value);
+                }}
+                className="flex-1 border px-3 py-2 rounded-full text-sm focus:outline-orange-400"
+              />
+              <button onClick={() => {}} className="text-orange-500 pr-2">
+                <SendRounded />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* NAV BAR */}
+      <div className="fixed bottom-0 w-full flex justify-around items-center border-t bg-white py-2 shadow-inner">
         <div className="flex flex-col items-center text-xs text-orange-500">
-          <Home fontSize="small" />
+          <HomeIcon fontSize="small" />
           Home
         </div>
         <div className="flex flex-col items-center text-xs text-gray-600">
-          <School fontSize="small" />
+          <MenuBook fontSize="small" />
           My Courses
         </div>
         <div className="flex flex-col items-center text-xs text-gray-600">
           <CalendarMonth fontSize="small" />
           Calendar
-        </div>
-        <div className="flex flex-col items-center text-xs text-gray-600">
-          <MenuBook fontSize="small" />
-          Handbook
         </div>
         <div className="flex flex-col items-center text-xs text-gray-600">
           <Menu fontSize="small" />
