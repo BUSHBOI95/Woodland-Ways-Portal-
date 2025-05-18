@@ -18,6 +18,7 @@ import {
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState("");
+  const [commentInputs, setCommentInputs] = useState({});
 
   const handlePost = () => {
     if (newPost.trim()) {
@@ -28,6 +29,7 @@ export default function Home() {
         timestamp: moment(),
         content: newPost,
         likes: 0,
+        liked: false,
         comments: [],
       };
       setPosts([post, ...posts]);
@@ -36,7 +38,11 @@ export default function Home() {
   };
 
   const handleLikePost = (postId) => {
-    setPosts(posts.map(post => post.id === postId ? { ...post, likes: post.likes + 1 } : post));
+    setPosts(posts.map(post =>
+      post.id === postId
+        ? { ...post, likes: post.liked ? post.likes - 1 : post.likes + 1, liked: !post.liked }
+        : post
+    ));
   };
 
   const handleLikeComment = (postId, commentId) => {
@@ -46,7 +52,7 @@ export default function Home() {
             ...post,
             comments: post.comments.map(comment =>
               comment.id === commentId
-                ? { ...comment, likes: (comment.likes || 0) + 1 }
+                ? { ...comment, likes: comment.liked ? comment.likes - 1 : comment.likes + 1, liked: !comment.liked }
                 : comment
             ),
           }
@@ -54,20 +60,23 @@ export default function Home() {
     ));
   };
 
-  const handleComment = (postId, commentText) => {
-    if (commentText.trim()) {
+  const handleComment = (postId) => {
+    const commentText = commentInputs[postId];
+    if (commentText && commentText.trim()) {
       const newComment = {
         id: Date.now(),
         author: "Woodland Ways",
         timestamp: moment(),
         content: commentText,
         likes: 0,
+        liked: false,
       };
       setPosts(posts.map(post =>
         post.id === postId
           ? { ...post, comments: [...post.comments, newComment] }
           : post
       ));
+      setCommentInputs({ ...commentInputs, [postId]: "" });
     }
   };
 
@@ -119,7 +128,7 @@ export default function Home() {
                 <p className="text-xs text-gray-500">{post.role} • {post.timestamp.fromNow()}</p>
               </div>
             </div>
-            <p className="mb-3">{post.content}</p>
+            <p className="mb-3 text-sm">{post.content}</p>
             <div className="flex items-center text-gray-600 text-sm gap-4 mb-3">
               <button onClick={() => handleLikePost(post.id)} className="flex items-center gap-1">
                 <ThumbUpAltRounded className="text-gray-600" fontSize="small" />
@@ -136,7 +145,7 @@ export default function Home() {
             </div>
 
             {post.comments.map(comment => (
-              <div key={comment.id} className="bg-gray-100 p-3 rounded-lg mb-2 ml-3">
+              <div key={comment.id} className="bg-gray-100 p-3 rounded-xl mb-2 ml-3">
                 <div className="flex items-center gap-2 mb-1">
                   <img src={WWLogo} alt="Avatar" className="h-5 w-5 rounded-full" />
                   <p className="text-sm font-bold">Woodland Ways</p>
@@ -161,12 +170,16 @@ export default function Home() {
               <input
                 type="text"
                 placeholder="Write a comment..."
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleComment(post.id, e.target.value);
-                }}
+                value={commentInputs[post.id] || ""}
+                onChange={(e) =>
+                  setCommentInputs({ ...commentInputs, [post.id]: e.target.value })
+                }
                 className="flex-1 border px-3 py-2 rounded-full text-sm focus:outline-orange-400"
               />
-              <button onClick={() => {}} className="text-orange-500 pr-2">
+              <button
+                onClick={() => handleComment(post.id)}
+                className="text-orange-500 pr-2"
+              >
                 <SendRounded />
               </button>
             </div>
@@ -174,7 +187,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* NAV BAR */}
+      {/* Bottom Navigation */}
       <div className="fixed bottom-0 w-full flex justify-around items-center border-t bg-white py-2 shadow-inner">
         <div className="flex flex-col items-center text-xs text-orange-500">
           <HomeIcon fontSize="small" />
