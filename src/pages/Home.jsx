@@ -79,7 +79,7 @@ export default function Home() {
           ? { ...post, comments: [...post.comments, newComment] }
           : post
       ));
-      setCommentInputs({ ...commentInputs, [postId]: "" });
+      setCommentInputs({ ...commentInputs, [post.id]: "" });
     }
   };
 
@@ -90,12 +90,12 @@ export default function Home() {
         Staff Portal
       </div>
 
-      {/* Logo with reduced margin */}
-      <div className="flex justify-center mt-2 mb-4">
+      {/* Logo - directly under header */}
+      <div className="flex justify-center mt-3 mb-2">
         <img src={WWLogo} alt="Woodland Ways Logo" className="h-20 object-contain" />
       </div>
 
-      {/* Post input */}
+      {/* Feed section */}
       <div className="px-4 pb-28">
         <textarea
           placeholder="What's on your mind?"
@@ -197,7 +197,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Navigation with Alerts moved to the left of Menu */}
       <div className="fixed bottom-0 w-full flex justify-around items-center border-t bg-white py-2 shadow-inner">
         <button onClick={() => navigate("/home")} className="flex flex-col items-center text-xs text-orange-500">
           <HomeIcon fontSize="small" />
@@ -211,13 +211,13 @@ export default function Home() {
           <CalendarMonth fontSize="small" />
           Calendar
         </button>
-        <button onClick={() => navigate("/menu")} className="flex flex-col items-center text-xs text-gray-600">
-          <Menu fontSize="small" />
-          Menu
-        </button>
         <button onClick={() => alert("Notifications clicked")} className="flex flex-col items-center text-xs text-gray-600">
           <NotificationsNoneRounded fontSize="small" />
           Alerts
+        </button>
+        <button onClick={() => navigate("/menu")} className="flex flex-col items-center text-xs text-gray-600">
+          <Menu fontSize="small" />
+          Menu
         </button>
       </div>
     </div>
