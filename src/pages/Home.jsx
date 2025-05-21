@@ -90,13 +90,13 @@ export default function Home() {
         Staff Portal
       </div>
 
-      {/* Logo - tight to header */}
-      <div className="flex justify-center pt-2 pb-1">
+      {/* Logo */}
+      <div className="flex justify-center mt-2 mb-1">
         <img src={WWLogo} alt="Woodland Ways Logo" className="h-20 object-contain" />
       </div>
 
       {/* Feed content */}
-      <div className="px-4 pb-28 -mt-2">
+      <div className="px-4 pb-28">
         <textarea
           placeholder="What's on your mind?"
           value={newPost}
@@ -126,7 +126,6 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Posts */}
         {posts.map(post => (
           <div key={post.id} className="mt-6 p-4 border rounded-lg shadow-sm bg-white">
             <div className="flex items-center gap-2 mb-2">
@@ -152,7 +151,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Comments */}
             {post.comments.map(comment => (
               <div key={comment.id} className="bg-gray-100 p-3 rounded-xl mb-2 ml-3">
                 <div className="flex items-center gap-2 mb-1">
@@ -174,7 +172,6 @@ export default function Home() {
               </div>
             ))}
 
-            {/* Add comment */}
             <div className="flex items-center mt-2 gap-2">
               <img src={WWLogo} alt="Avatar" className="h-6 w-6 rounded-full" />
               <input
@@ -197,7 +194,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Bottom Nav */}
+      {/* Bottom Navigation */}
       <div className="fixed bottom-0 w-full flex justify-around items-center border-t bg-white py-2 shadow-inner">
         <button onClick={() => navigate("/home")} className="flex flex-col items-center text-xs text-orange-500">
           <HomeIcon fontSize="small" />
