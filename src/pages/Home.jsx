@@ -85,17 +85,18 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-between">
-      {/* Header with Notification Icon */}
-      <div className="flex items-center justify-between px-4 py-3 bg-orange-500 text-white shadow-md">
-        <h1 className="text-lg font-bold">Staff Portal</h1>
-        <NotificationsNoneRounded className="text-white" />
+      {/* Header */}
+      <div className="bg-orange-500 text-white text-center py-2 text-xl font-semibold shadow-md">
+        Staff Portal
       </div>
 
-      <div className="p-4 pb-28">
-        <div className="flex justify-center my-4">
-          <img src={WWLogo} alt="Woodland Ways Logo" className="h-24" />
-        </div>
+      {/* Logo with reduced margin */}
+      <div className="flex justify-center mt-2 mb-4">
+        <img src={WWLogo} alt="Woodland Ways Logo" className="h-20 object-contain" />
+      </div>
 
+      {/* Post input */}
+      <div className="px-4 pb-28">
         <textarea
           placeholder="What's on your mind?"
           value={newPost}
@@ -125,6 +126,7 @@ export default function Home() {
           </button>
         </div>
 
+        {/* Posts */}
         {posts.map(post => (
           <div key={post.id} className="mt-6 p-4 border rounded-lg shadow-sm bg-white">
             <div className="flex items-center gap-2 mb-2">
@@ -150,6 +152,7 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Comments */}
             {post.comments.map(comment => (
               <div key={comment.id} className="bg-gray-100 p-3 rounded-xl mb-2 ml-3">
                 <div className="flex items-center gap-2 mb-1">
@@ -171,6 +174,7 @@ export default function Home() {
               </div>
             ))}
 
+            {/* Comment input */}
             <div className="flex items-center mt-2 gap-2">
               <img src={WWLogo} alt="Avatar" className="h-6 w-6 rounded-full" />
               <input
@@ -210,6 +214,10 @@ export default function Home() {
         <button onClick={() => navigate("/menu")} className="flex flex-col items-center text-xs text-gray-600">
           <Menu fontSize="small" />
           Menu
+        </button>
+        <button onClick={() => alert("Notifications clicked")} className="flex flex-col items-center text-xs text-gray-600">
+          <NotificationsNoneRounded fontSize="small" />
+          Alerts
         </button>
       </div>
     </div>
