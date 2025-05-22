@@ -15,13 +15,11 @@ import {
   SendRounded,
   ReplyRounded,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState("");
   const [commentInputs, setCommentInputs] = useState({});
-  const navigate = useNavigate();
 
   const handlePost = () => {
     if (newPost.trim()) {
@@ -79,24 +77,24 @@ export default function Home() {
           ? { ...post, comments: [...post.comments, newComment] }
           : post
       ));
-      setCommentInputs({ ...commentInputs, [post.id]: "" });
+      setCommentInputs({ ...commentInputs, [postId]: "" });
     }
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-between">
+    <div className="min-h-screen bg-white flex flex-col justify-between pt-0">
       {/* Header */}
       <div className="bg-orange-500 text-white text-center py-2 text-xl font-semibold">
         Staff Portal
       </div>
 
       {/* Logo */}
-      <div className="flex justify-center items-center my-2">
-        <img src={WWLogo} alt="Woodland Ways Logo" className="h-20 w-auto" />
+      <div className="flex justify-center mt-2 mb-1">
+        <img src={WWLogo} alt="Woodland Ways Logo" className="h-20" />
       </div>
 
-      {/* Feed */}
-      <div className="px-4 pb-32">
+      {/* Post Input */}
+      <div className="px-4 pb-4">
         <textarea
           placeholder="What's on your mind?"
           value={newPost}
@@ -126,6 +124,7 @@ export default function Home() {
           </button>
         </div>
 
+        {/* Posts */}
         {posts.map(post => (
           <div key={post.id} className="mt-6 p-4 border rounded-lg shadow-sm bg-white">
             <div className="flex items-center gap-2 mb-2">
@@ -138,19 +137,20 @@ export default function Home() {
             <p className="mb-3 text-sm">{post.content}</p>
             <div className="flex items-center text-gray-600 text-sm gap-4 mb-3">
               <button onClick={() => handleLikePost(post.id)} className="flex items-center gap-1">
-                <ThumbUpAltRounded className="text-gray-600" fontSize="small" />
+                <ThumbUpAltRounded fontSize="small" />
                 Like ({post.likes})
               </button>
               <div className="flex items-center gap-1">
-                <ChatBubbleOutlineRounded className="text-gray-600" fontSize="small" />
+                <ChatBubbleOutlineRounded fontSize="small" />
                 Comment
               </div>
               <div className="flex items-center gap-1">
-                <SendRounded className="text-gray-600" fontSize="small" />
+                <SendRounded fontSize="small" />
                 Send
               </div>
             </div>
 
+            {/* Comments */}
             {post.comments.map(comment => (
               <div key={comment.id} className="bg-gray-100 p-3 rounded-xl mb-2 ml-3">
                 <div className="flex items-center gap-2 mb-1">
@@ -161,11 +161,11 @@ export default function Home() {
                 <p className="text-sm">{comment.content}</p>
                 <div className="flex items-center gap-4 text-sm mt-1 text-gray-600">
                   <button onClick={() => handleLikeComment(post.id, comment.id)} className="flex items-center gap-1">
-                    <ThumbUpAltRounded className="text-gray-600" fontSize="small" />
+                    <ThumbUpAltRounded fontSize="small" />
                     Like ({comment.likes})
                   </button>
                   <div className="flex items-center gap-1">
-                    <ReplyRounded className="text-gray-600" fontSize="small" />
+                    <ReplyRounded fontSize="small" />
                     Reply
                   </div>
                 </div>
@@ -194,25 +194,25 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 w-full flex justify-around items-center border-t bg-white py-2 shadow-inner z-10">
-        <div onClick={() => navigate("/home")} className="flex flex-col items-center text-xs text-orange-500">
+      {/* Nav Bar */}
+      <div className="fixed bottom-0 w-full flex justify-around items-center border-t bg-white py-2 shadow-inner">
+        <div className="flex flex-col items-center text-xs text-orange-500">
           <HomeIcon fontSize="small" />
           Home
         </div>
-        <div onClick={() => navigate("/my-courses")} className="flex flex-col items-center text-xs text-gray-600">
+        <div className="flex flex-col items-center text-xs text-gray-600">
           <MenuBook fontSize="small" />
           My Courses
         </div>
-        <div onClick={() => navigate("/calendar")} className="flex flex-col items-center text-xs text-gray-600">
+        <div className="flex flex-col items-center text-xs text-gray-600">
           <CalendarMonth fontSize="small" />
           Calendar
         </div>
-        <div onClick={() => navigate("/alerts")} className="flex flex-col items-center text-xs text-gray-600">
+        <div className="flex flex-col items-center text-xs text-gray-600">
           <Notifications fontSize="small" />
           Alerts
         </div>
-        <div onClick={() => navigate("/menu")} className="flex flex-col items-center text-xs text-gray-600">
+        <div className="flex flex-col items-center text-xs text-gray-600">
           <Menu fontSize="small" />
           Menu
         </div>
