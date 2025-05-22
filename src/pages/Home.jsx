@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import moment from "moment";
 import WWLogo from "../../Icon.png";
-import { useNavigate } from "react-router-dom";
 import {
   Home as HomeIcon,
   MenuBook,
@@ -21,7 +20,6 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState("");
   const [commentInputs, setCommentInputs] = useState({});
-  const navigate = useNavigate();
 
   const handlePost = () => {
     if (newPost.trim()) {
@@ -79,24 +77,21 @@ export default function Home() {
           ? { ...post, comments: [...post.comments, newComment] }
           : post
       ));
-      setCommentInputs({ ...commentInputs, [post.id]: "" });
+      setCommentInputs({ ...commentInputs, [postId]: "" });
     }
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-between">
-      {/* Header */}
+      {/* Header + Logo in One Block */}
       <div className="bg-orange-500 text-white text-center py-2 text-xl font-semibold shadow-md">
-        Staff Portal
+        <p>Staff Portal</p>
+        <div className="flex justify-center pt-1 pb-0 mt-[-8px]">
+          <img src={WWLogo} alt="Woodland Ways Logo" className="h-16 object-contain" />
+        </div>
       </div>
 
-      {/* Logo section — spacing tightened */}
-      <div className="flex justify-center pt-1 pb-2">
-        <img src={WWLogo} alt="Woodland Ways Logo" className="h-20 object-contain" />
-      </div>
-
-      {/* Feed Content */}
-      <div className="px-4 pb-28">
+      <div className="p-4">
         <textarea
           placeholder="What's on your mind?"
           value={newPost}
@@ -196,26 +191,26 @@ export default function Home() {
 
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 w-full flex justify-around items-center border-t bg-white py-2 shadow-inner">
-        <button onClick={() => navigate("/home")} className="flex flex-col items-center text-xs text-orange-500">
+        <div className="flex flex-col items-center text-xs text-orange-500">
           <HomeIcon fontSize="small" />
           Home
-        </button>
-        <button onClick={() => navigate("/my-courses")} className="flex flex-col items-center text-xs text-gray-600">
+        </div>
+        <div className="flex flex-col items-center text-xs text-gray-600">
           <MenuBook fontSize="small" />
           My Courses
-        </button>
-        <button onClick={() => navigate("/calendar")} className="flex flex-col items-center text-xs text-gray-600">
+        </div>
+        <div className="flex flex-col items-center text-xs text-gray-600">
           <CalendarMonth fontSize="small" />
           Calendar
-        </button>
-        <button onClick={() => alert("Notifications clicked")} className="flex flex-col items-center text-xs text-gray-600">
+        </div>
+        <div className="flex flex-col items-center text-xs text-gray-600">
           <NotificationsNoneRounded fontSize="small" />
           Alerts
-        </button>
-        <button onClick={() => navigate("/menu")} className="flex flex-col items-center text-xs text-gray-600">
+        </div>
+        <div className="flex flex-col items-center text-xs text-gray-600">
           <Menu fontSize="small" />
           Menu
-        </button>
+        </div>
       </div>
     </div>
   );
