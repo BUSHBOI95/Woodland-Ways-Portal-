@@ -13,7 +13,7 @@ import {
   ChatBubbleOutlineRounded,
   SendRounded,
   ReplyRounded,
-  NotificationsNoneRounded,
+  NotificationsNone,
 } from "@mui/icons-material";
 
 export default function Home() {
@@ -83,15 +83,18 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-between">
-      {/* Header + Logo in One Block */}
-      <div className="bg-orange-500 text-white text-center py-2 text-xl font-semibold shadow-md">
-        <p>Staff Portal</p>
-        <div className="flex justify-center pt-1 pb-0 mt-[-8px]">
-          <img src={WWLogo} alt="Woodland Ways Logo" className="h-16 object-contain" />
-        </div>
+      {/* Header */}
+      <div className="bg-orange-500 text-white text-center py-2 text-xl font-semibold">
+        Staff Portal
       </div>
 
-      <div className="p-4">
+      {/* Logo */}
+      <div className="flex justify-center mt-2 mb-1">
+        <img src={WWLogo} alt="Woodland Ways Logo" className="h-20 w-auto" />
+      </div>
+
+      {/* Feed Content */}
+      <div className="p-4 pt-1">
         <textarea
           placeholder="What's on your mind?"
           value={newPost}
@@ -133,15 +136,15 @@ export default function Home() {
             <p className="mb-3 text-sm">{post.content}</p>
             <div className="flex items-center text-gray-600 text-sm gap-4 mb-3">
               <button onClick={() => handleLikePost(post.id)} className="flex items-center gap-1">
-                <ThumbUpAltRounded className="text-gray-600" fontSize="small" />
+                <ThumbUpAltRounded fontSize="small" />
                 Like ({post.likes})
               </button>
               <div className="flex items-center gap-1">
-                <ChatBubbleOutlineRounded className="text-gray-600" fontSize="small" />
+                <ChatBubbleOutlineRounded fontSize="small" />
                 Comment
               </div>
               <div className="flex items-center gap-1">
-                <SendRounded className="text-gray-600" fontSize="small" />
+                <SendRounded fontSize="small" />
                 Send
               </div>
             </div>
@@ -156,11 +159,11 @@ export default function Home() {
                 <p className="text-sm">{comment.content}</p>
                 <div className="flex items-center gap-4 text-sm mt-1 text-gray-600">
                   <button onClick={() => handleLikeComment(post.id, comment.id)} className="flex items-center gap-1">
-                    <ThumbUpAltRounded className="text-gray-600" fontSize="small" />
+                    <ThumbUpAltRounded fontSize="small" />
                     Like ({comment.likes})
                   </button>
                   <div className="flex items-center gap-1">
-                    <ReplyRounded className="text-gray-600" fontSize="small" />
+                    <ReplyRounded fontSize="small" />
                     Reply
                   </div>
                 </div>
@@ -204,7 +207,7 @@ export default function Home() {
           Calendar
         </div>
         <div className="flex flex-col items-center text-xs text-gray-600">
-          <NotificationsNoneRounded fontSize="small" />
+          <NotificationsNone fontSize="small" />
           Alerts
         </div>
         <div className="flex flex-col items-center text-xs text-gray-600">
