@@ -90,8 +90,8 @@ export default function Home() {
         Staff Portal
       </div>
 
-      {/* Logo with NO margin */}
-      <div className="flex justify-center">
+      {/* Logo section with no top/bottom margin */}
+      <div className="flex justify-center mt-2 mb-1">
         <img src={WWLogo} alt="Woodland Ways Logo" className="h-20 object-contain" />
       </div>
 
