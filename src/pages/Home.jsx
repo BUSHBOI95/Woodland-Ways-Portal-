@@ -6,6 +6,7 @@ import {
   MenuBook,
   CalendarMonth,
   Menu,
+  Notifications,
   Image,
   Event,
   Group,
@@ -13,13 +14,14 @@ import {
   ChatBubbleOutlineRounded,
   SendRounded,
   ReplyRounded,
-  NotificationsNone,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState("");
   const [commentInputs, setCommentInputs] = useState({});
+  const navigate = useNavigate();
 
   const handlePost = () => {
     if (newPost.trim()) {
@@ -77,7 +79,7 @@ export default function Home() {
           ? { ...post, comments: [...post.comments, newComment] }
           : post
       ));
-      setCommentInputs({ ...commentInputs, [postId]: "" });
+      setCommentInputs({ ...commentInputs, [post.id]: "" });
     }
   };
 
@@ -89,12 +91,12 @@ export default function Home() {
       </div>
 
       {/* Logo */}
-      <div className="flex justify-center mt-2 mb-1">
+      <div className="flex justify-center items-center my-2">
         <img src={WWLogo} alt="Woodland Ways Logo" className="h-20 w-auto" />
       </div>
 
-      {/* Feed Content */}
-      <div className="p-4 pt-1">
+      {/* Feed */}
+      <div className="px-4 pb-32">
         <textarea
           placeholder="What's on your mind?"
           value={newPost}
@@ -136,15 +138,15 @@ export default function Home() {
             <p className="mb-3 text-sm">{post.content}</p>
             <div className="flex items-center text-gray-600 text-sm gap-4 mb-3">
               <button onClick={() => handleLikePost(post.id)} className="flex items-center gap-1">
-                <ThumbUpAltRounded fontSize="small" />
+                <ThumbUpAltRounded className="text-gray-600" fontSize="small" />
                 Like ({post.likes})
               </button>
               <div className="flex items-center gap-1">
-                <ChatBubbleOutlineRounded fontSize="small" />
+                <ChatBubbleOutlineRounded className="text-gray-600" fontSize="small" />
                 Comment
               </div>
               <div className="flex items-center gap-1">
-                <SendRounded fontSize="small" />
+                <SendRounded className="text-gray-600" fontSize="small" />
                 Send
               </div>
             </div>
@@ -159,11 +161,11 @@ export default function Home() {
                 <p className="text-sm">{comment.content}</p>
                 <div className="flex items-center gap-4 text-sm mt-1 text-gray-600">
                   <button onClick={() => handleLikeComment(post.id, comment.id)} className="flex items-center gap-1">
-                    <ThumbUpAltRounded fontSize="small" />
+                    <ThumbUpAltRounded className="text-gray-600" fontSize="small" />
                     Like ({comment.likes})
                   </button>
                   <div className="flex items-center gap-1">
-                    <ReplyRounded fontSize="small" />
+                    <ReplyRounded className="text-gray-600" fontSize="small" />
                     Reply
                   </div>
                 </div>
@@ -193,24 +195,24 @@ export default function Home() {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 w-full flex justify-around items-center border-t bg-white py-2 shadow-inner">
-        <div className="flex flex-col items-center text-xs text-orange-500">
+      <div className="fixed bottom-0 w-full flex justify-around items-center border-t bg-white py-2 shadow-inner z-10">
+        <div onClick={() => navigate("/home")} className="flex flex-col items-center text-xs text-orange-500">
           <HomeIcon fontSize="small" />
           Home
         </div>
-        <div className="flex flex-col items-center text-xs text-gray-600">
+        <div onClick={() => navigate("/my-courses")} className="flex flex-col items-center text-xs text-gray-600">
           <MenuBook fontSize="small" />
           My Courses
         </div>
-        <div className="flex flex-col items-center text-xs text-gray-600">
+        <div onClick={() => navigate("/calendar")} className="flex flex-col items-center text-xs text-gray-600">
           <CalendarMonth fontSize="small" />
           Calendar
         </div>
-        <div className="flex flex-col items-center text-xs text-gray-600">
-          <NotificationsNone fontSize="small" />
+        <div onClick={() => navigate("/alerts")} className="flex flex-col items-center text-xs text-gray-600">
+          <Notifications fontSize="small" />
           Alerts
         </div>
-        <div className="flex flex-col items-center text-xs text-gray-600">
+        <div onClick={() => navigate("/menu")} className="flex flex-col items-center text-xs text-gray-600">
           <Menu fontSize="small" />
           Menu
         </div>
