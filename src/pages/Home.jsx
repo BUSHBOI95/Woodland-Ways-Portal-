@@ -90,12 +90,12 @@ export default function Home() {
         Staff Portal
       </div>
 
-      {/* Logo */}
-      <div className="flex justify-center mt-2 mb-1">
+      {/* Logo with NO margin */}
+      <div className="flex justify-center">
         <img src={WWLogo} alt="Woodland Ways Logo" className="h-20 object-contain" />
       </div>
 
-      {/* Feed content */}
+      {/* Feed Content */}
       <div className="px-4 pb-28">
         <textarea
           placeholder="What's on your mind?"
